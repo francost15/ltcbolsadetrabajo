@@ -1,0 +1,293 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuarios {
+  id             String           @id @default(uuid())
+  email          String           @unique @map("email")
+  password       String           @map("password")
+  rol            RolUsuario       @map("rol")
+  createdAt      DateTime         @default(now()) @map("fecha_registro")
+  updatedAt      DateTime         @default(now()) @updatedAt @map("ultima_actualizacion")
+  candidato      Candidatos?
+  empresa        Empresas?
+  notificaciones Notificaciones[]
+  pagos          Pagos[]
+  suscripciones  Suscripciones[]
+
+  @@map("usuarios")
+}
+
+model Candidatos {
+  id                    String              @id @default(uuid())
+  usuarioId             String              @unique @map("usuario_id")
+  nombre                String              @map("nombre")
+  curriculum            String?             @map("curriculum")
+  createdAt             DateTime            @default(now()) @map("fecha_creacion")
+  updatedAt             DateTime            @default(now()) @updatedAt @map("fecha_actualizacion")
+  ciudad                String?             @map("ciudad")
+  disponibleReubicacion DisponibilidadReub? @map("disponible_reubicacion")
+  estado                String?             @map("estado")
+  linkedinUrl           String?             @map("linkedin_url")
+  monedaSalario         String?             @map("moneda_salario")
+  pais                  String?             @map("pais")
+  portfolioUrl          String?             @map("portfolio_url")
+  resumenProfesional    String?             @map("resumen_profesional")
+  salarioMaximo         Decimal?            @map("salario_maximo")
+  salarioMinimo         Decimal?            @map("salario_minimo")
+  telefono              String?             @map("telefono")
+  tituloProfesional     String?             @map("titulo_profesional")
+  usuario               Usuarios            @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  certificaciones       Certificaciones[]
+  educaciones           Educaciones[]       @relation("CandidatoEducacion")
+  experiencias          Experiencias[]      @relation("CandidatoExperiencia")
+  idiomas               Idiomas[]
+  matches               Matches[]
+  preferencias          PreferenciasEmpleo?
+
+  @@map("candidatos")
+}
+
+model Empresas {
+  id        String     @id @default(uuid())
+  usuarioId String     @unique @map("usuario_id")
+  nombre    String     @map("nombre")
+  giro      String?    @map("giro")
+  ubicacion String?    @map("ubicacion")
+  logo      String?    @map("logo")
+  createdAt DateTime   @default(now()) @map("fecha_creacion")
+  updatedAt DateTime   @default(now()) @updatedAt @map("fecha_actualizacion")
+  usuario   Usuarios   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  vacantes  Vacantes[]
+
+  @@map("empresas")
+}
+
+model Vacantes {
+  id                 String           @id @default(uuid())
+  empresaId          String           @map("empresa_id")
+  titulo             String           @map("titulo")
+  descripcion        String           @map("descripcion")
+  salario            Decimal?         @map("salario")
+  ubicacion          String?          @map("ubicacion")
+  tipoEmpleo         String?          @map("tipo_empleo")
+  createdAt          DateTime         @default(now()) @map("fecha_publicacion")
+  updatedAt          DateTime         @default(now()) @updatedAt @map("fecha_actualizacion")
+  activa             Boolean          @default(true) @map("activa")
+  categoria          CategoriaVacante @map("categoria")
+  empresa            Empresas         @relation(fields: [empresaId], references: [id], onDelete: Cascade)
+  matches            Matches[]
+
+  @@map("vacantes")
+}
+
+model Planes {
+  id              String          @id @default(uuid())
+  nombre          String          @unique @map("nombre")
+  descripcion     String?         @map("descripcion")
+  precio          Decimal         @map("precio")
+  duracionDias    Int             @map("duracion_dias")
+  caracteristicas Json?           @map("caracteristicas")
+  suscripciones   Suscripciones[]
+
+  @@map("planes")
+}
+
+model Suscripciones {
+  id        String            @id @default(uuid())
+  usuarioId String            @map("usuario_id")
+  planId    String            @map("plan_id")
+  createdAt DateTime          @default(now()) @map("fecha_inicio")
+  fechaFin  DateTime          @map("fecha_fin")
+  estado    EstadoSuscripcion @default(activa) @map("estado")
+  updatedAt DateTime          @default(now()) @updatedAt @map("fecha_actualizacion")
+  pagos     Pagos[]
+  plan      Planes            @relation(fields: [planId], references: [id])
+  usuario   Usuarios          @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@map("suscripciones")
+}
+
+model Pagos {
+  id                    String        @id @default(uuid())
+  suscripcionId         String        @map("suscripcion_id")
+  usuarioId             String        @map("usuario_id")
+  monto                 Decimal       @map("monto")
+  metodoPago            String?       @map("metodo_pago")
+  referenciaTransaccion String?       @unique @map("referencia_transaccion")
+  estadoPago            EstadoPago    @map("estado_pago")
+  createdAt             DateTime      @default(now()) @map("fecha_transaccion")
+  suscripcion           Suscripciones @relation(fields: [suscripcionId], references: [id], onDelete: Cascade)
+  usuario               Usuarios      @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@map("pagos")
+}
+
+model Matches {
+  id                  String     @id @default(uuid())
+  candidatoId         String     @map("candidato_id")
+  vacanteId           String     @map("vacante_id")
+  porcentajeMatch     Decimal    @map("porcentaje_match")
+  createdAt           DateTime   @default(now()) @map("fecha_match")
+  empresaInteresada   Boolean    @default(false) @map("empresa_interesada")
+  candidatoEnvioInfo  Boolean    @default(false) @map("candidato_envio_info")
+  fechaEmpresaInteres DateTime?  @map("fecha_empresa_interes")
+  fechaCandidatoEnvio DateTime?  @map("fecha_candidato_envio")
+  candidato           Candidatos @relation(fields: [candidatoId], references: [id], onDelete: Cascade)
+  vacante             Vacantes   @relation(fields: [vacanteId], references: [id], onDelete: Cascade)
+
+  @@unique([candidatoId, vacanteId])
+  @@map("matches")
+}
+
+model Notificaciones {
+  id               String    @id @default(uuid())
+  usuarioId        String    @map("usuario_id")
+  tipoNotificacion String    @map("tipo_notificacion")
+  mensaje          String    @map("mensaje")
+  createdAt        DateTime  @default(now()) @map("enviada_en")
+  leida            Boolean   @default(false) @map("leida")
+  fechaLectura     DateTime? @map("fecha_lectura")
+  usuario          Usuarios  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@map("notificaciones")
+}
+
+model Experiencias {
+  id            String     @id @default(uuid())
+  candidatoId   String     @map("candidato_id")
+  cargo         String     @map("cargo")
+  empresa       String     @map("empresa")
+  fechaInicio   DateTime   @map("fecha_inicio")
+  fechaFin      DateTime?  @map("fecha_fin")
+  trabajoActual Boolean    @default(false) @map("trabajo_actual")
+  descripcion   String     @map("descripcion")
+  candidato     Candidatos @relation("CandidatoExperiencia", fields: [candidatoId], references: [id], onDelete: Cascade)
+
+  @@map("experiencias")
+}
+
+model Educaciones {
+  id           String     @id @default(uuid())
+  candidatoId  String     @map("candidato_id")
+  institucion  String     @map("institucion")
+  titulo       String     @map("titulo")
+  campoEstudio String     @map("campo_estudio")
+  fechaInicio  DateTime   @map("fecha_inicio")
+  fechaFin     DateTime?  @map("fecha_fin")
+  candidato    Candidatos @relation("CandidatoEducacion", fields: [candidatoId], references: [id], onDelete: Cascade)
+
+  @@map("educaciones")
+}
+
+model Certificaciones {
+  id             String     @id @default(uuid())
+  candidatoId    String     @map("candidato_id")
+  nombre         String     @map("nombre")
+  entidadEmisora String     @map("entidad_emisora")
+  anioObtencion  Int        @map("anio_obtencion")
+  candidato      Candidatos @relation(fields: [candidatoId], references: [id], onDelete: Cascade)
+
+  @@map("certificaciones")
+}
+
+model Idiomas {
+  id          String      @id @default(uuid())
+  candidatoId String      @map("candidato_id")
+  nombre      String      @map("nombre")
+  nivel       NivelIdioma @map("nivel")
+  candidato   Candidatos  @relation(fields: [candidatoId], references: [id], onDelete: Cascade)
+
+  @@map("idiomas")
+}
+
+model PreferenciasEmpleo {
+  id                 String     @id @default(uuid())
+  candidatoId        String     @unique @map("candidato_id")
+  tiposEmpleo        String[]   @map("tipos_empleo")
+  modalidadesTrabajo String[]   @map("modalidades_trabajo")
+  cargosInteres      String[]   @map("cargos_interes")
+  industriasInteres  String[]   @map("industrias_interes")
+  createdAt          DateTime   @default(now()) @map("fecha_creacion")
+  updatedAt          DateTime   @default(now()) @updatedAt @map("fecha_actualizacion")
+  candidato          Candidatos @relation(fields: [candidatoId], references: [id], onDelete: Cascade)
+
+  @@map("preferencias_empleo")
+}
+
+enum RolUsuario {
+  candidato
+  empresa
+  administrador
+}
+
+enum EstadoSuscripcion {
+  activa
+  inactiva
+  cancelada
+  pendiente
+  vencida
+}
+
+enum EstadoPago {
+  PENDIENTE
+  COMPLETADO
+  FALLIDO
+  REEMBOLSADO
+}
+
+enum NivelIdioma {
+  NATIVO
+  AVANZADO_C2
+  AVANZADO_C1
+  INTERMEDIO_B2
+  INTERMEDIO_B1
+  BASICO_A2
+  BASICO_A1
+}
+
+enum DisponibilidadReub {
+  SI
+  NO
+  ABIERTO
+}
+
+enum CategoriaVacante {
+  DESARROLLO_SOFTWARE
+  DISENO_UX_UI
+  MARKETING_DIGITAL
+  VENTAS
+  ATENCION_CLIENTE
+  RECURSOS_HUMANOS
+  ADMINISTRACION
+  FINANZAS_CONTABILIDAD
+  LEGAL
+  OPERACIONES
+  LOGISTICA
+  PRODUCCION
+  CALIDAD
+  INVESTIGACION_DESARROLLO
+  EDUCACION_FORMACION
+  SALUD
+  TECNOLOGIA_INFORMACION
+  SEGURIDAD
+  COMUNICACIONES
+  CONSULTORIA
+  COMPRAS
+  MANTENIMIENTO
+  SERVICIO_TECNICO
+  COMERCIO_EXTERIOR
+  BIENES_RAICES
+  CONSTRUCCION
+  AGRICULTURA
+  MINERIA
+  ENERGIA
+  TRANSPORTE
+  OTROS
+}

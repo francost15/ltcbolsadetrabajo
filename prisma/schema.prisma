@@ -9,19 +9,19 @@ datasource db {
 }
 
 model Usuarios {
-  id             String           @id @default(uuid())
-  email          String           @unique @map("email")
-  password       String           @map("password")
-  rol            RolUsuario       @map("rol")
-  resetToken     String?          @map("reset_token")
-  resetTokenExpiry DateTime?      @map("reset_token_expiry")
-  createdAt      DateTime         @default(now()) @map("fecha_registro")
-  updatedAt      DateTime         @default(now()) @updatedAt @map("ultima_actualizacion")
-  candidato      Candidatos?
-  empresa        Empresas?
-  notificaciones Notificaciones[]
-  pagos          Pagos[]
-  suscripciones  Suscripciones[]
+  id               String           @id @default(uuid())
+  email            String           @unique @map("email")
+  password         String           @map("password")
+  rol              RolUsuario       @map("rol")
+  createdAt        DateTime         @default(now()) @map("fecha_registro")
+  updatedAt        DateTime         @default(now()) @updatedAt @map("ultima_actualizacion")
+  resetToken       String?          @map("reset_token")
+  resetTokenExpiry DateTime?        @map("reset_token_expiry")
+  candidato        Candidatos?
+  empresa          Empresas?
+  notificaciones   Notificaciones[]
+  pagos            Pagos[]
+  suscripciones    Suscripciones[]
 
   @@map("usuarios")
 }
@@ -72,19 +72,19 @@ model Empresas {
 }
 
 model Vacantes {
-  id                 String           @id @default(uuid())
-  empresaId          String           @map("empresa_id")
-  titulo             String           @map("titulo")
-  descripcion        String           @map("descripcion")
-  salario            Decimal?         @map("salario")
-  ubicacion          String?          @map("ubicacion")
-  tipoEmpleo         String?          @map("tipo_empleo")
-  createdAt          DateTime         @default(now()) @map("fecha_publicacion")
-  updatedAt          DateTime         @default(now()) @updatedAt @map("fecha_actualizacion")
-  activa             Boolean          @default(true) @map("activa")
-  categoria          CategoriaVacante @map("categoria")
-  empresa            Empresas         @relation(fields: [empresaId], references: [id], onDelete: Cascade)
-  matches            Matches[]
+  id          String           @id @default(uuid())
+  empresaId   String           @map("empresa_id")
+  titulo      String           @map("titulo")
+  descripcion String           @map("descripcion")
+  createdAt   DateTime         @default(now()) @map("fecha_publicacion")
+  updatedAt   DateTime         @default(now()) @updatedAt @map("fecha_actualizacion")
+  activa      Boolean          @default(true) @map("activa")
+  tipoEmpleo  String?          @map("tipo_empleo")
+  categoria   CategoriaVacante @map("categoria")
+  salario     Decimal?         @map("salario")
+  ubicacion   String?          @map("ubicacion")
+  matches     Matches[]
+  empresa     Empresas         @relation(fields: [empresaId], references: [id], onDelete: Cascade)
 
   @@map("vacantes")
 }

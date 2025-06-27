@@ -54,14 +54,12 @@ export const NavBar = () => {
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo y enlace principal */}
-          <Link href={userConfig.homeLink} className="flex items-center gap-2 transition-opacity hover:opacity-80">
-            <Image 
-              src="/logo.svg" 
-              alt="LTC Project Logo" 
-              width={54} 
-              height={54} 
-              priority
-            />
+          <Link href={userConfig.homeLink} className="flex gap-3 items-center">
+            <Image src="/logo.svg" alt="LTC Logo" width={150} height={50} className="w-auto h-16" />
+            <div className="hidden sm:block">
+              <h1 className="font-bold text-gray-900 text-md">LTC Bolsa de Trabajo</h1>
+              <p className="text-xs font-extralight text-gray-600">Por López Tamayo Consultores</p>
+            </div>
           </Link>
 
           {/* Menú de usuario */}

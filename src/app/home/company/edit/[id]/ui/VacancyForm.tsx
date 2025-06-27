@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "react-hot-toast";
-import { CategoriaVacante } from "@/generated/prisma";
+import { CategoriaVacante } from "@prisma/client";
 import { editVacancy } from "@/actions";
 import { useRouter } from "next/navigation";
 import { Autocomplete } from "@/components/ui/Autocomplete";

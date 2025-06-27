@@ -2,8 +2,8 @@
 
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
+import { CategoriaVacante } from "@prisma/client";
 import { revalidatePath } from "next/cache";
-import { CategoriaVacante } from "@/generated/prisma";
 import { z } from "zod";
 
 const vacancySchema = z.object({

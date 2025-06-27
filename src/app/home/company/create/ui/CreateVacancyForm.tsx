@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { CategoriaVacante } from "@/generated/prisma";
+import { CategoriaVacante } from "@prisma/client";
 import { formatearCategoria, TODAS_CATEGORIAS } from "@/types/vacancy";
 import { createVacancy } from "@/actions";
 import { Loading } from "@/components";

@@ -4,8 +4,8 @@ import Link from 'next/link'
 import { logout } from '@/actions';
 import { useSession } from 'next-auth/react';
 import { useMemo, useEffect, useState } from 'react';
-import { RolUsuario } from '@/generated/prisma';
 import { getCompanyByUserId } from '@/actions/company/getCompanyByUserId';
+import { RolUsuario } from '@prisma/client';
 
 
 

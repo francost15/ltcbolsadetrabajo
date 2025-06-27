@@ -69,7 +69,7 @@ const MobileMenu = ({ onClose }: { onClose: () => void }) => (
           <h3 className="px-3 text-xs font-semibold tracking-wider text-gray-500 uppercase">Iniciar Sesión</h3>
           <div className="space-y-2">
             <DropdownItem href="/auth/login" icon={IoBusiness}>Como Empresa</DropdownItem>
-            <DropdownItem href="/auth/login" icon={IoPerson}>Como Candidato</DropdownItem>
+            <DropdownItem href="/404" icon={IoPerson}>Como Candidato</DropdownItem>
           </div>
         </div>
 
@@ -77,7 +77,7 @@ const MobileMenu = ({ onClose }: { onClose: () => void }) => (
           <h3 className="px-3 text-xs font-semibold tracking-wider text-gray-500 uppercase">Registrarse</h3>
           <div className="space-y-2">
             <DropdownItem href="/auth/register/company" icon={IoBusiness}>Como Empresa</DropdownItem>
-            <DropdownItem href="/auth/register/candidate" icon={IoPerson}>Como Candidato</DropdownItem>
+            <DropdownItem href="/404" icon={IoPerson}>Como Candidato</DropdownItem>
           </div>
         </div>
       </div>

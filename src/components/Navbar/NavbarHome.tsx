@@ -45,7 +45,7 @@ const DesktopDropdown = ({ type, label }: { type: 'login' | 'register', label: s
           <DropdownItem href={isRegister ? `${baseUrl}/company` : baseUrl} icon={IoBusiness}>
             Como Empresa
           </DropdownItem>
-          <DropdownItem href={isRegister ? `${baseUrl}/candidate` : baseUrl} icon={IoPerson}>
+          <DropdownItem href={isRegister ? `${baseUrl}/404` : baseUrl} icon={IoPerson}>
             Como Candidato
           </DropdownItem>
         </div>

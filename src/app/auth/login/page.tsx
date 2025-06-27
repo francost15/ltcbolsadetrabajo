@@ -68,8 +68,8 @@ export default function LoginPage() {
         <span className="text-gray-600">¿No tienes una cuenta? </span>
         <div className="flex items-center justify-center gap-4 mt-2">
           <Link 
-            href="/auth/register/candidate" 
-            className="text-blue-600 px-4 py-2 rounded-lg border border-blue-600 transition-colors hover:bg-blue-50"
+            href="/404" 
+            className="text-gray-500 px-4 py-2 rounded-lg border border-gray-500 transition-colors "
           >
             Registrarse como Candidato
           </Link>

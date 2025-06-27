@@ -63,7 +63,7 @@ export default function ApplyVacancyModal({ isOpen, vacancyId, vacancyTitle, onC
                 </h3>
                 <div className="mt-2">
                   <p className="text-sm text-gray-500">
-                    ¿Estás seguro que deseas postularte a la vacante "{vacancyTitle}"? La empresa podrá ver tu perfil y curriculum.
+                    ¿Estás seguro que deseas postularte a la vacante &quot;{vacancyTitle}&quot;? La empresa podrá ver tu perfil y curriculum.
                   </p>
                 </div>
               </div>

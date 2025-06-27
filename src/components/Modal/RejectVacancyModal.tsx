@@ -63,7 +63,7 @@ export default function RejectVacancyModal({ isOpen, vacancyId, vacancyTitle, on
                 </h3>
                 <div className="mt-2">
                   <p className="text-sm text-gray-500">
-                    ¿Estás seguro que deseas rechazar la vacante "{vacancyTitle}"? Esta acción no se puede deshacer.
+                    ¿Estás seguro que deseas rechazar la vacante &quot;{vacancyTitle}&quot;? Esta acción no se puede deshacer.
                   </p>
                 </div>
               </div>

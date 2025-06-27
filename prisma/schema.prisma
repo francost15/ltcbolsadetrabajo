@@ -13,6 +13,8 @@ model Usuarios {
   email          String           @unique @map("email")
   password       String           @map("password")
   rol            RolUsuario       @map("rol")
+  resetToken     String?          @map("reset_token")
+  resetTokenExpiry DateTime?      @map("reset_token_expiry")
   createdAt      DateTime         @default(now()) @map("fecha_registro")
   updatedAt      DateTime         @default(now()) @updatedAt @map("ultima_actualizacion")
   candidato      Candidatos?

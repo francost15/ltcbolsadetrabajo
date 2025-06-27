@@ -19,9 +19,7 @@ export async function authenticate(
 }
 export const login = async (email: string, password: string) => {
   try {
-    const result = await signIn("credentials", { email, password, redirect: false });
-    // Si signIn retorna la sesión, puedes extraer el nombre aquí si es necesario
-    // Por defecto, el nombre estará en la sesión de NextAuth en el cliente
+    await signIn("credentials", { email, password, redirect: false });
     return { ok: true };
   } catch (error) {
     console.log(error);

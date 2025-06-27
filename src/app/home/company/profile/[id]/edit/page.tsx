@@ -1,19 +1,33 @@
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { getCompany } from "@/actions";
 import { BackButton } from "@/components";
 import { CompanyEditForm } from "./ui/CompanyEditForm";
 
-interface PageProps {
-  params: {
-    id: string;
+type PageParams = {
+  id: string;
+};
+
+export async function generateMetadata({ 
+  params 
+}: { 
+  params: Promise<PageParams> 
+}): Promise<Metadata> {
+  const resolvedParams = await params;
+  return {
+    title: `Editar Perfil de Empresa - ${resolvedParams.id}`,
   };
-  searchParams: { [key: string]: string | string[] | undefined };
 }
 
-export default async function EditCompanyProfilePage({ params, searchParams }: PageProps) {
+export default async function EditCompanyProfilePage({
+  params,
+}: {
+  params: Promise<PageParams>;
+}) {
   const session = await auth();
-  const id = params.id;
+  const resolvedParams = await params;
+  const id = resolvedParams.id;
   const { company } = await getCompany(id);
 
   // Verificar que el usuario sea el dueño de la empresa

@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { deleteVacancy } from '@/actions';
-import { useRouter } from 'next/navigation';
 
 interface DeleteVacancyModalProps {
   isOpen: boolean;
@@ -13,7 +12,6 @@ interface DeleteVacancyModalProps {
 
 export default function DeleteVacancyModal({ isOpen, vacancyId, vacancyTitle, onCloseModal }: DeleteVacancyModalProps) {
   const [isDeleting, setIsDeleting] = useState(false);
-  const router = useRouter();
 
   if (!isOpen) return null;
 
@@ -66,7 +64,7 @@ export default function DeleteVacancyModal({ isOpen, vacancyId, vacancyTitle, on
                 </h3>
                 <div className="mt-2">
                   <p className="text-sm text-gray-500">
-                    ¿Estás seguro que deseas eliminar la vacante "{vacancyTitle}"? Esta acción no se puede deshacer.
+                    ¿Estás seguro que deseas eliminar la vacante &quot;{vacancyTitle}&quot;? Esta acción no se puede deshacer.
                   </p>
                 </div>
               </div>

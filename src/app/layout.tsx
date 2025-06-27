@@ -10,6 +10,9 @@ export const metadata: Metadata = {
     default:'HOME - LTC Bolsa de Trabajo'
   },
   description: "Encuentra las mejores oportunidades laborales y conecta con empresas líderes en el mercado. LTC Bolsa de Trabajo te ayuda a impulsar tu carrera profesional.",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export const viewport: Viewport = {

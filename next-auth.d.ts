@@ -5,17 +5,11 @@ declare module "next-auth" {
     user: {
       id: string;
       email: string;
+      password: string;
       rol: string;
       nombre?: string;
       // Agrega aquí otros campos que quieras exponer en la sesión
     } & DefaultSession["user"];
   }
 
-  interface User {
-    id: string;
-    email: string;
-    rol: string;
-    nombre?: string;
-    // Otros campos personalizados
-  }
 }

@@ -6,8 +6,11 @@ import { SessionProvider } from "next-auth/react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "LTC Bolsa de Trabajo",
-  description: "LTC Bolsa de Trabajo",
+  title: {
+    template: '%s - LTC Bolsa de Trabajo',
+    default:'HOME - LTC Bolsa de Trabajo'
+  },
+  description: "Encuentra las mejores oportunidades laborales y conecta con empresas líderes en el mercado. LTC Bolsa de Trabajo te ayuda a impulsar tu carrera profesional.",
 };
 
 export default async function HomeLayout({ children }: { children: ReactNode }) {

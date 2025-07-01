@@ -3,9 +3,8 @@ import Link from 'next/link';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState } from "react";
 import { registerCompany, login } from "@/actions";
-import { giros, type Giro } from '@/constants/giros';
-import { MEXICAN_CITIES, type MexicanCity } from '@/constants/cities';
-import { Autocomplete } from '@/components/ui/Autocomplete';
+import { giros, type Giro, MEXICAN_CITIES, type MexicanCity } from '@/constants';
+import { Autocomplete } from '@/components';
 
 type FormInputs = {
   nombre: string;

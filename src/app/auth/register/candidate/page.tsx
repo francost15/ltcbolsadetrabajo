@@ -2,8 +2,8 @@
 import Link from 'next/link';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState } from "react";
-import { RolUsuario } from "@/generated/prisma";
 import { login, registerUser } from "@/actions";
+import { RolUsuario } from '@prisma/client';
 
 type FormInputs = {
   nombre: string;
@@ -24,7 +24,7 @@ export default function RegisterPage() {
       return;
     }
     await login(data.email, data.password);
-    window.location.replace("/app");
+    window.location.replace("/home/candidate");
   };
 
   return (
@@ -64,20 +64,6 @@ export default function RegisterPage() {
           />
           {errors.password && <span className="block mt-1 text-xs text-red-500">{errors.password.message}</span>}
         </div>
-        {/* <div className="mb-4">
-          <label className="block mb-2 font-medium text-gray-700">Rol</label>
-          <select
-            {...register("rol", { required: "El rol es obligatorio" })}
-            className="w-full p-3 border border-gray-200 rounded-lg bg-gray-50"
-            defaultValue=""
-          >
-            <option value="" disabled>Selecciona un rol</option>
-            {Object.values(RolUsuario).map((rol) => (
-              <option key={rol} value={rol}>{rol}</option>
-            ))}
-          </select>
-          {errors.rol && <span className="block mt-1 text-xs text-red-500">{errors.rol.message}</span>}
-        </div> */}
         <button type="submit" className="w-full p-3 font-semibold text-white transition-all duration-200 bg-blue-800 rounded-lg shadow hover:bg-blue-900">
           Registrarse
         </button>

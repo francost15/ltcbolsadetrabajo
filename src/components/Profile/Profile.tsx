@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { Profile } from '@/interfaces';
+import { LogoutButton } from '@/components/ui/LogoutButton';
 import { PersonalInfo } from './PersonalInfo';
 import { Experience } from './Experience';
 import { Education } from './Education';
@@ -14,10 +15,22 @@ const TABS = [
   { key: 'skills', label: 'Habilidades' },
 ];
 
-const ActionButton = ({ onClick, children }: { onClick: () => void, children: React.ReactNode }) => (
+const ActionButton = ({ onClick, children, variant = 'primary' }: { 
+  onClick: () => void, 
+  children: React.ReactNode,
+  variant?: 'primary' | 'danger'
+}) => (
   <button
     onClick={onClick}
-    className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-800 rounded-md hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+    className={`inline-flex items-center px-4 py-2 text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors min-h-10 touch-manipulation ${
+      variant === 'danger' 
+        ? 'text-white bg-red-600 hover:bg-red-700 focus:ring-red-500' 
+        : 'text-white bg-blue-800 hover:bg-blue-900 focus:ring-blue-500'
+    }`}
+    style={{
+      WebkitTapHighlightColor: 'transparent',
+      touchAction: 'manipulation'
+    }}
   >
     {children}
   </button>
@@ -47,15 +60,18 @@ export function Profile({ profile }: { profile: Profile }) {
     <>
       <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-sm">
-          <div className="p-4 sm:p-6 border-b flex justify-between items-center">
-            <h2 className="text-xl font-semibold text-gray-900">Mi Perfil</h2>
-            <div className="flex gap-3">
-              <ActionButton onClick={handleUploadCV}>
-                📄 Analizar CV con IA
-              </ActionButton>
-              <ActionButton onClick={handleEdit}>
-                Editar Perfil
-              </ActionButton>
+          <div className="p-4 sm:p-6 border-b">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <h2 className="text-xl font-semibold text-gray-900">Mi Perfil</h2>
+              <div className="flex flex-wrap gap-2 sm:gap-3 w-full sm:w-auto">
+                <ActionButton onClick={handleUploadCV}>
+                  📄 Analizar CV con IA
+                </ActionButton>
+                <ActionButton onClick={handleEdit}>
+                  Editar Perfil
+                </ActionButton>
+                <LogoutButton />
+              </div>
             </div>
           </div>
           <div className="border-b overflow-x-auto sm:overflow-visible">

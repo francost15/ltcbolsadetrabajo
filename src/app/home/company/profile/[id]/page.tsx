@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { BackButton } from "@/components";
+import { LogoutButton } from "@/components/ui/LogoutButton";
 import Image from "next/image";
 import Link from "next/link";
 import { FaBuilding, FaMapMarkerAlt, FaEnvelope, FaClock, FaIdCard, FaPen } from "react-icons/fa";
@@ -37,20 +38,27 @@ export default async function CompanyProfilePage({ params }: Props) {
 
   return (
     <div className="container px-4 py-8 mx-auto">
-      <div className="mx-auto max-w-4xl">
+      <div className="max-w-4xl mx-auto">
         <div className="overflow-hidden bg-white rounded-xl shadow-lg">
           {/* Cabecera con logo e información principal */}
           <div className="p-6 border-b border-gray-200 sm:p-8">
-            <div className="flex justify-between items-start mb-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start mb-6 gap-4">
               <BackButton/>
               {isOwner && (
-                <Link
-                  href={`/home/company/profile/${id}/edit`}
-                  className="inline-flex gap-2 items-center px-4 py-2 text-white bg-blue-600 rounded-lg transition-colors hover:bg-blue-700"
-                >
-                  <FaPen className="w-4 h-4" />
-                  Editar Perfil
-                </Link>
+                <div className="flex flex-wrap gap-2 sm:gap-3 w-full sm:w-auto">
+                  <Link
+                    href={`/home/company/profile/${id}/edit`}
+                    className="inline-flex gap-2 items-center px-4 py-2 text-white bg-blue-600 rounded-lg transition-colors hover:bg-blue-700 min-h-10 touch-manipulation"
+                    style={{
+                      WebkitTapHighlightColor: 'transparent',
+                      touchAction: 'manipulation'
+                    }}
+                  >
+                    <FaPen className="w-4 h-4" />
+                    Editar Perfil
+                  </Link>
+                  <LogoutButton />
+                </div>
               )}
             </div>
             
@@ -67,7 +75,8 @@ export default async function CompanyProfilePage({ params }: Props) {
                   <FaBuilding className="w-16 h-16 text-gray-400" />
                 )}
               </div>
-              <div className="flex-1 text-center sm:text-left">
+              
+              <div className="text-center sm:text-left">
                 <h1 className="text-3xl font-bold text-gray-900">{company.nombre}</h1>
                 <div className="mt-4 space-y-2">
                   {company.giro && (

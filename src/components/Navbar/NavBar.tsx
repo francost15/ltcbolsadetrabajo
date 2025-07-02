@@ -1,10 +1,9 @@
 "use client"
 import Image from 'next/image'
 import Link from 'next/link'
-import { logout } from '@/actions';
+import { getCompanyByUserId, logout } from '@/actions';
 import { useSession } from 'next-auth/react';
 import { useMemo, useEffect, useState, useRef } from 'react';
-import { getCompanyByUserId } from '@/actions/company/getCompanyByUserId';
 import { RolUsuario } from '@prisma/client';
 
 
@@ -70,6 +69,10 @@ export const NavBar = () => {
     }
   }, [rol, companyId]);
 
+  const handleMenuToggle = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <nav className="w-full bg-white border-b border-gray-100 shadow-sm">
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -91,8 +94,13 @@ export const NavBar = () => {
             
             <button
               type="button"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="flex items-center justify-center text-base font-bold text-gray-700 bg-gray-100 rounded-full w-9 h-9 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors hover:bg-gray-200 active:bg-gray-300"
+              onClick={handleMenuToggle}
+              onTouchStart={handleMenuToggle}
+              className="flex items-center justify-center text-base font-bold text-gray-700 bg-gray-100 rounded-full min-w-11 min-h-11 w-11 h-11 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors hover:bg-gray-200 active:bg-gray-300 cursor-pointer touch-manipulation select-none"
+              style={{
+                WebkitTapHighlightColor: 'transparent',
+                touchAction: 'manipulation'
+              }}
               aria-label="Abrir menú de usuario"
               aria-expanded={isMenuOpen}
             >

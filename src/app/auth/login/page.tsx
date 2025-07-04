@@ -3,6 +3,30 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { login } from '@/actions';
+import { Metadata } from 'next';
+
+// Metadatos específicos para la página de login
+export const metadata: Metadata = {
+  title: 'Iniciar Sesión - Acceso a tu Cuenta',
+  description: 'Inicia sesión en LTC Bolsa de Trabajo para acceder a vacantes exclusivas, gestionar tu perfil profesional y conectar con las mejores empresas de México.',
+  keywords: [
+    'iniciar sesión bolsa trabajo',
+    'login empleo México',
+    'acceso cuenta trabajo',
+    'entrar plataforma empleo',
+    'acceso vacantes trabajo',
+    'login candidato',
+    'acceso empresa reclutamiento'
+  ],
+  alternates: {
+    canonical: 'https://ltcbolsadetrabajo.com/auth/login',
+  },
+  openGraph: {
+    title: 'Iniciar Sesión - LTC Bolsa de Trabajo',
+    description: 'Accede a tu cuenta para encontrar las mejores oportunidades laborales en México.',
+    url: 'https://ltcbolsadetrabajo.com/auth/login',
+  },
+}
 
 interface LoginFormInputs {
   email: string;
@@ -26,7 +50,7 @@ export default function LoginPage() {
   return (
     <>
       <div className="flex flex-col items-center mb-6">
-        <h2 className="mb-1 text-2xl font-bold tracking-tight text-gray-900">Iniciar sesión</h2>
+        <h1 className="mb-1 text-2xl font-bold tracking-tight text-gray-900">Iniciar sesión</h1>
         <p className="mb-2 text-sm text-gray-500">Ingresa tus credenciales para acceder a tu cuenta</p>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>

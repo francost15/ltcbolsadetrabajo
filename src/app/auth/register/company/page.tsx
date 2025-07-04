@@ -5,6 +5,35 @@ import { useState } from "react";
 import { registerCompany, login } from "@/actions";
 import { giros, type Giro, MEXICAN_CITIES, type MexicanCity } from '@/constants';
 import { Autocomplete } from '@/components';
+import { Metadata } from 'next';
+
+// Metadatos específicos para registro de empresas
+export const metadata: Metadata = {
+  title: 'Registro Empresa - Publica Vacantes Gratis',
+  description: 'Registra tu empresa gratis en LTC Bolsa de Trabajo. Publica vacantes, encuentra candidatos en México, reclutamiento eficiente con IA. ¡Contrata al mejor talento para tu empresa!',
+  keywords: [
+    'registro empresa gratis',
+    'publicar vacantes gratis',
+    'crear cuenta empresa',
+    'reclutamiento en línea México',
+    'encontrar candidatos',
+    'plataforma reclutamiento',
+    'contratar empleados',
+    'registro reclutador',
+    'cuenta empresa bolsa trabajo',
+    'subir vacante gratis',
+    'atraer talento México',
+    'selección personal online'
+  ],
+  alternates: {
+    canonical: 'https://ltcbolsadetrabajo.com/auth/register/company',
+  },
+  openGraph: {
+    title: 'Registro Empresa - Encuentra el Mejor Talento',
+    description: 'Registra tu empresa gratis y accede a miles de candidatos calificados. Publica vacantes y encuentra el talento ideal.',
+    url: 'https://ltcbolsadetrabajo.com/auth/register/company',
+  },
+}
 
 type FormInputs = {
   nombre: string;
@@ -38,8 +67,8 @@ export default function RegisterCompanyPage() {
   return (
     <>
       <div className="flex flex-col items-center mb-6">
-        <h2 className="mb-1 text-2xl font-bold tracking-tight text-gray-900">Registro de Empresa</h2>
-        <p className="mb-2 text-sm text-gray-500">Completa los campos para registrar tu empresa</p>
+        <h1 className="mb-1 text-2xl font-bold tracking-tight text-gray-900">Registro de Empresa</h1>
+        <p className="mb-2 text-sm text-gray-500">Registra tu empresa gratis y encuentra el mejor talento</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>

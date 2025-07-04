@@ -14,5 +14,6 @@ export * from './Profile/Experience';
 export * from './Profile/PersonalInfo';
 export * from './Profile/Profile';
 export * from './Profile/Skills';
+export { default as StructuredData } from './StructuredData';
 export * from './ui/Autocomplete';
 export * from './ui/badge';

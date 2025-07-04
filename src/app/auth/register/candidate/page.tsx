@@ -4,6 +4,33 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState } from "react";
 import { login, registerUser } from "@/actions";
 import { RolUsuario } from '@prisma/client';
+import { Metadata } from 'next';
+
+// Metadatos específicos para registro de candidatos
+export const metadata: Metadata = {
+  title: 'Registro Candidato - Crear Cuenta Gratis',
+  description: 'Regístrate gratis como candidato en LTC Bolsa de Trabajo. Accede a miles de vacantes, trabajos bien pagados, empleo remoto y oportunidades laborales en México. ¡Encuentra tu trabajo ideal!',
+  keywords: [
+    'registro candidato gratis',
+    'crear cuenta trabajo México',
+    'registro bolsa trabajo',
+    'cuenta candidato empleo',
+    'registrarse buscar trabajo',
+    'crear perfil profesional',
+    'registro gratuito empleo',
+    'cuenta gratis vacantes',
+    'registrarse trabajos México',
+    'crear cuenta cv online'
+  ],
+  alternates: {
+    canonical: 'https://ltcbolsadetrabajo.com/auth/register/candidate',
+  },
+  openGraph: {
+    title: 'Registro Candidato - Encuentra tu Trabajo Ideal',
+    description: 'Regístrate gratis y accede a miles de oportunidades laborales en México. Conecta con las mejores empresas.',
+    url: 'https://ltcbolsadetrabajo.com/auth/register/candidate',
+  },
+}
 
 type FormInputs = {
   nombre: string;
@@ -30,8 +57,8 @@ export default function RegisterPage() {
   return (
     <>
       <div className="flex flex-col items-center mb-6">
-        <h2 className="mb-1 text-2xl font-bold tracking-tight text-gray-900">Crear cuenta</h2>
-        <p className="mb-2 text-sm text-gray-500">Completa los campos para registrarte</p>
+        <h1 className="mb-1 text-2xl font-bold tracking-tight text-gray-900">Crear cuenta como Candidato</h1>
+        <p className="mb-2 text-sm text-gray-500">Regístrate gratis y encuentra tu trabajo ideal</p>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
@@ -65,7 +92,7 @@ export default function RegisterPage() {
           {errors.password && <span className="block mt-1 text-xs text-red-500">{errors.password.message}</span>}
         </div>
         <button type="submit" className="w-full p-3 font-semibold text-white transition-all duration-200 bg-blue-800 rounded-lg shadow hover:bg-blue-900">
-          Registrarse
+          Registrarse como Candidato
         </button>
         {errorMessage && (
           <div className="p-3 mt-4 text-sm text-red-500 rounded-lg bg-red-50">{errorMessage}</div>

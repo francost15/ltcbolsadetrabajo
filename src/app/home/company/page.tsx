@@ -2,13 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { getMyCompanyVacancies, getVacanciesByCategory } from "@/actions";
-import { Loading, VacancyCard } from "@/components";
+import { Loading, VacancyCard, AdBanner } from "@/components";
 import { formatearCategoria, CATEGORIA_TODOS, TODAS_CATEGORIAS } from "@/types/vacancy";
-import { CategoriaVacante } from "@/generated/prisma";
 import { VacantesInterface } from "@/interfaces";
 import { FaPlus, FaFilter } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-
+import { CategoriaVacante } from "@prisma/client";
 const CategoryFilter = ({ selectedCategory, onCategoryChange }: { 
   selectedCategory: string; 
   onCategoryChange: (category: string) => void 
@@ -133,7 +132,11 @@ export default function CompanyPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-4 sm:px-6">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-5xl mx-auto">
+        {/* Banner de publicidad */}
+        <AdBanner variant="sidebar" />
+        
+        {/* Contenido principal */}
         <div className="flex flex-col gap-6 mb-8">
           <div className="flex justify-center gap-4">
             <CategoryFilter 

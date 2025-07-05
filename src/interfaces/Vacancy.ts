@@ -1,4 +1,4 @@
-import { CategoriaVacante } from "@/generated/prisma";
+import { CategoriaVacante } from "@prisma/client";
 
 export interface VacantesInterface {
   id: string;
@@ -13,7 +13,7 @@ export interface VacantesInterface {
   activa: boolean;
   totalCandidatos: number;
   candidatosInteresados: number;
-  empresa: {
+  empresa?: {
     nombre: string;
     logo: string | null;
     ubicacion: string;

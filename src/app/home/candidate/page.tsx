@@ -1,12 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react";
-import { JobCards, Loading } from "@/components";
+import { JobCards, Loading, AdBanner } from "@/components";
 
 import { JobCardVacancy, VacantesInterface } from "@/interfaces";
 import { getAvailableVacancies } from "@/actions/vacancies/getAvailableVacancies";
 import { getMyApplications } from "@/actions/vacancies/getMyApplications";
-import { CategoriaVacante } from "@/generated/prisma";
+import { CategoriaVacante } from "@prisma/client";
 
 const transformVacancyToJobCard = (vacancy: {
   id: string;
@@ -98,7 +98,11 @@ export default function CandidatePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-2 md:px-0">
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-4xl mx-auto">
+        {/* Banner de publicidad */}
+        <AdBanner variant="sidebar" />
+        
+        {/* Contenido principal */}
         <div className="flex flex-col gap-4 mb-8">
           <div className="flex justify-center">
             <TabButton 

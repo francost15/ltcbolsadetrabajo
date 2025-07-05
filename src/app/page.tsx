@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { FaArrowRight } from 'react-icons/fa';
 import { useState } from 'react';
-import { Footer, NavbarHome} from '@/components';
+import { Footer, NavbarHome, AdBanner } from '@/components';
 
 
 export default function Home() {
@@ -185,7 +185,12 @@ export default function Home() {
         </div>
       </section>
       
-
+      {/* Banner de Publicidad */}
+      <section className="py-16 bg-gray-50">
+        <div className="px-6 mx-auto max-w-4xl lg:px-8">
+          <AdBanner variant="banner" />
+        </div>
+      </section>
 
       {/* FAQ Section */}
       <section className="py-24 bg-gradient-to-b from-white to-gray-50">

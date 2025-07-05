@@ -12,6 +12,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://ltcbolsadetrabajo.com'),
   title: {
     template: '%s | LTC Bolsa de Trabajo - Empleo en México con IA',
     default: 'LTC Bolsa de Trabajo - Encuentra Empleo en México con Inteligencia Artificial'

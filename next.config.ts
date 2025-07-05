@@ -15,9 +15,6 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   // Optimizaciones SEO
-  experimental: {
-    optimizeCss: true,
-  },
   compress: true,
   poweredByHeader: false,
   // Headers para SEO y seguridad

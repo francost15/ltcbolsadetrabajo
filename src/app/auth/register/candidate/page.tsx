@@ -4,33 +4,6 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState } from "react";
 import { login, registerUser } from "@/actions";
 import { RolUsuario } from '@prisma/client';
-import { Metadata } from 'next';
-
-// Metadatos específicos para registro de candidatos
-export const metadata: Metadata = {
-  title: 'Registro Candidato - Crear Cuenta Gratis',
-  description: 'Regístrate gratis como candidato en LTC Bolsa de Trabajo. Accede a miles de vacantes, trabajos bien pagados, empleo remoto y oportunidades laborales en México. ¡Encuentra tu trabajo ideal!',
-  keywords: [
-    'registro candidato gratis',
-    'crear cuenta trabajo México',
-    'registro bolsa trabajo',
-    'cuenta candidato empleo',
-    'registrarse buscar trabajo',
-    'crear perfil profesional',
-    'registro gratuito empleo',
-    'cuenta gratis vacantes',
-    'registrarse trabajos México',
-    'crear cuenta cv online'
-  ],
-  alternates: {
-    canonical: 'https://ltcbolsadetrabajo.com/auth/register/candidate',
-  },
-  openGraph: {
-    title: 'Registro Candidato - Encuentra tu Trabajo Ideal',
-    description: 'Regístrate gratis y accede a miles de oportunidades laborales en México. Conecta con las mejores empresas.',
-    url: 'https://ltcbolsadetrabajo.com/auth/register/candidate',
-  },
-}
 
 type FormInputs = {
   nombre: string;

@@ -11,15 +11,16 @@ import {
 import { createAnnualSubscription } from '@/actions';
 import { useRouter } from 'next/navigation';
 import { LoaderIcon, toast } from 'react-hot-toast';
+import { getMercadoPagoPublicKey } from '@/config/mercado-pago-client';
 
 // Inicializar Mercado Pago
-const publicKey = process.env.NEXT_PUBLIC_MP_PUBLIC_KEY;
-if (typeof window !== 'undefined' && publicKey) {
+const publicKey = getMercadoPagoPublicKey();
+
+if (typeof window !== 'undefined') {
   console.log('🔑 Inicializando Mercado Pago con public key:', publicKey.substring(0, 20) + '...');
   initMercadoPago(publicKey);
 } else {
-  console.error('❌ No se encontró NEXT_PUBLIC_MP_PUBLIC_KEY en las variables de entorno');
-  console.error('🔧 Configura NEXT_PUBLIC_MP_PUBLIC_KEY en tu servidor de producción');
+  console.log('🔧 Mercado Pago se inicializará en el cliente');
 }
 
 interface SubscriptionFormProps {
@@ -85,7 +86,8 @@ export default function SubscriptionForm({ userEmail, planPrice }: SubscriptionF
     
     try {
       // Verificar que Mercado Pago esté inicializado
-      if (!process.env.NEXT_PUBLIC_MP_PUBLIC_KEY) {
+      const publicKey = getMercadoPagoPublicKey();
+      if (!publicKey) {
         throw new Error('Configuración de Mercado Pago faltante');
       }
 

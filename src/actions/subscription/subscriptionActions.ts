@@ -2,24 +2,8 @@
 
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
-import { MercadoPagoConfig, Payment } from "mercadopago";
+import { getMercadoPagoClient, isMercadoPagoConfigured } from "@/lib/mercado-pago";
 import { revalidatePath } from "next/cache";
-
-// Configuración de Mercado Pago - PRODUCCIÓN
-const accessToken = process.env.MERCADO_PAGO_ACCESS_TOKEN;
-
-if (!accessToken) {
-  throw new Error('MERCADO_PAGO_ACCESS_TOKEN no está configurado. Verifica las variables de entorno.');
-}
-
-const mercadoPagoConfig = new MercadoPagoConfig({
-  accessToken: accessToken,
-  options: {
-    timeout: 10000, // Aumentado para producción
-  }
-});
-
-const paymentClient = new Payment(mercadoPagoConfig);
 
 interface PaymentData {
   token: string;
@@ -122,16 +106,12 @@ export async function createAnnualSubscription(paymentData: PaymentData) {
     console.log('🔄 Iniciando proceso de suscripción...');
     
     // Verificar configuración de Mercado Pago
-    const accessToken = process.env.MERCADO_PAGO_ACCESS_TOKEN;
-    const publicKey = process.env.NEXT_PUBLIC_MP_PUBLIC_KEY;
-    
-    if (!accessToken) {
-      throw new Error('MERCADO_PAGO_ACCESS_TOKEN no está configurado en el servidor');
+    if (!isMercadoPagoConfigured()) {
+      throw new Error('Configuración de Mercado Pago incompleta. Verifica las variables de entorno.');
     }
     
-    if (!publicKey) {
-      throw new Error('NEXT_PUBLIC_MP_PUBLIC_KEY no está configurado en el servidor');
-    }
+    const accessToken = process.env.MERCADO_PAGO_ACCESS_TOKEN!;
+    const publicKey = process.env.NEXT_PUBLIC_MP_PUBLIC_KEY!;
     
     console.log('🔑 Access token configurado: SÍ');
     console.log('🔑 Public key configurado: SÍ');
@@ -197,6 +177,7 @@ export async function createAnnualSubscription(paymentData: PaymentData) {
       isTestMode
     });
 
+    const paymentClient = getMercadoPagoClient();
     const payment = await paymentClient.create({
       body: {
         payer: {

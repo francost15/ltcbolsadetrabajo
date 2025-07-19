@@ -90,14 +90,7 @@ const MobileMenu = ({ onClose }: { onClose: () => void }) => {
                 className="flex items-center w-full px-4 py-3 text-sm text-gray-600 hover:text-gray-900 rounded-xl hover:bg-gray-50 transition-all duration-200"
               >
                 <IoBusiness className="mr-3 w-5 h-5 text-gray-400" />
-                Como Empresa
-              </Link>
-              <Link 
-                href="/404" 
-                className="flex items-center w-full px-4 py-3 text-sm text-gray-600 hover:text-gray-900 rounded-xl hover:bg-gray-50 transition-all duration-200"
-              >
-                <IoPerson className="mr-3 w-5 h-5 text-gray-400" />
-                Como Candidato
+                Iniciar Sesión
               </Link>
             </div>
           </div>

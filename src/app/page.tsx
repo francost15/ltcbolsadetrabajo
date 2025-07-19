@@ -31,7 +31,7 @@ export default function Home() {
               </p>
               <div className="flex flex-col gap-4 items-center mt-10 sm:flex-row sm:gap-x-6">
                 <Link
-                  href="/auth/register/company"
+                  href="/auth/register/candidate"
                   className="inline-flex justify-center items-center px-6 py-3 w-full text-base font-semibold text-white bg-blue-800 rounded-lg shadow-sm transition-all duration-300 sm:w-auto hover:bg-blue-700 hover:scale-105"
                 >
                   Comenzar ahora

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react";
-import { getMyCompanyVacancies, getVacanciesByCategory } from "@/actions";
+import { getMyCompanyVacancies, getMyCompanyVacanciesByCategory } from "@/actions";
 import { Loading, VacancyCard, AdBanner } from "@/components";
 import { formatearCategoria, CATEGORIA_TODOS, TODAS_CATEGORIAS } from "@/types/vacancy";
 import { VacantesInterface } from "@/interfaces";
@@ -113,7 +113,7 @@ export default function CompanyPage() {
         setLoading(true);
         const response = selectedCategory === CATEGORIA_TODOS
           ? await getMyCompanyVacancies()
-          : await getVacanciesByCategory(selectedCategory as CategoriaVacante);
+          : await getMyCompanyVacanciesByCategory(selectedCategory as CategoriaVacante);
 
         if (response.ok) {
           setVacancies(response.vacantes!);

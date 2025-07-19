@@ -22,6 +22,7 @@ export interface VacantesInterface {
   analisis?: string | null;
   areas_mejora?: string[] | null;
   habilidades_match?: any;
+  isOwner?: boolean;
 }
 
 export interface JobCardVacancy {

@@ -15,6 +15,8 @@ export * from './vacancies/editVacancy';
 export * from './vacancies/getAvailableVacancies';
 export * from './vacancies/getCandidatebyVacancies';
 export * from './vacancies/getCompanyVacancies';
+export * from './vacancies/getMyCompanyVacanciesByCategory';
+export * from './vacancies/verifyVacancyOwnership';
 export * from './vacancies/getMyApplications';
 export * from './vacancies/getVacancies';
 export * from './vacancies/getVacanciesByCategory';

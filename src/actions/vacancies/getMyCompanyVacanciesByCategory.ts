@@ -2,9 +2,10 @@
 
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
+import { CategoriaVacante } from "@prisma/client";
 
-// Obtener vacantes de mi empresa
-export const getMyCompanyVacancies = async () => {
+// Obtener vacantes de mi empresa por categoría
+export const getMyCompanyVacanciesByCategory = async (categoria: CategoriaVacante) => {
   try {
     const session = await auth();
     
@@ -32,6 +33,7 @@ export const getMyCompanyVacancies = async () => {
     const vacantes = await prisma.vacantes.findMany({
       where: {
         empresaId: usuario.empresa.id,
+        categoria: categoria,
         activa: true
       },
       include: {
@@ -59,7 +61,7 @@ export const getMyCompanyVacancies = async () => {
         activa: v.activa,
         totalCandidatos: v.matches.length,
         candidatosInteresados: v.matches.filter(m => m.candidatoEnvioInfo).length,
-        isOwner: true // Todas las vacantes de getMyCompanyVacancies son de la empresa actual
+        isOwner: true // Todas las vacantes de getMyCompanyVacanciesByCategory son de la empresa actual
       }))
     };
 

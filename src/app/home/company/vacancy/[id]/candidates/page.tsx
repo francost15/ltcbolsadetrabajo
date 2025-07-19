@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react";
-import { getVacancy, getCandidatesByVacancy } from "@/actions";
+import { getVacancy, getCandidatesByVacancy, verifyVacancyOwnership } from "@/actions";
 import { Badge, BackButton } from "@/components";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -59,7 +59,13 @@ export default function CandidatesPage({ params }: Props) {
       try {
         const { id } = await params;
         
-        // Verificar que la vacante exista
+        // Verificar que la vacante exista y pertenezca a la empresa actual
+        const ownershipCheck = await verifyVacancyOwnership(id);
+        if (!ownershipCheck.ok) {
+          router.push("/home/company");
+          return;
+        }
+
         const vacancyResponse = await getVacancy(id);
         if (!vacancyResponse.ok || !vacancyResponse.vacancy) {
           router.push("/home/company");

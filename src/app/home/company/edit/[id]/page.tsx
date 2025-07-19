@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { getVacancyById } from '@/actions';
+import { getVacancyById, verifyVacancyOwnership } from '@/actions';
 import { VacancyForm } from './ui/VacancyForm';
 import { BackButton } from '@/components';
 
@@ -11,6 +11,14 @@ interface Props {
 
 export default async function EditVacancyPage({ params }: Props) {
   const { id } = await params;
+  
+  // Verificar que la vacante pertenece a la empresa actual
+  const ownershipCheck = await verifyVacancyOwnership(id);
+  
+  if (!ownershipCheck.ok) {
+    redirect('/home/company');
+  }
+  
   const vacancy = await getVacancyById(id);
 
   if (!vacancy) {

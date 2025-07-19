@@ -6,8 +6,14 @@ import { MercadoPagoConfig, Payment } from "mercadopago";
 import { revalidatePath } from "next/cache";
 
 // Configuración de Mercado Pago - PRODUCCIÓN
+const accessToken = process.env.MERCADO_PAGO_ACCESS_TOKEN;
+
+if (!accessToken) {
+  throw new Error('MERCADO_PAGO_ACCESS_TOKEN no está configurado. Verifica las variables de entorno.');
+}
+
 const mercadoPagoConfig = new MercadoPagoConfig({
-  accessToken: process.env.MERCADO_PAGO_ACCESS_TOKEN!,
+  accessToken: accessToken,
   options: {
     timeout: 10000, // Aumentado para producción
   }
@@ -114,8 +120,22 @@ function isRecoverableError(status: string, statusDetail: string): boolean {
 export async function createAnnualSubscription(paymentData: PaymentData) {
   try {
     console.log('🔄 Iniciando proceso de suscripción...');
-    console.log('🔑 Access token configurado:', process.env.MERCADO_PAGO_ACCESS_TOKEN ? 'SÍ' : 'NO');
-    console.log('🌍 Modo:', process.env.MERCADO_PAGO_ACCESS_TOKEN?.startsWith('TEST-') ? 'PRUEBA' : 'PRODUCCIÓN');
+    
+    // Verificar configuración de Mercado Pago
+    const accessToken = process.env.MERCADO_PAGO_ACCESS_TOKEN;
+    const publicKey = process.env.NEXT_PUBLIC_MP_PUBLIC_KEY;
+    
+    if (!accessToken) {
+      throw new Error('MERCADO_PAGO_ACCESS_TOKEN no está configurado en el servidor');
+    }
+    
+    if (!publicKey) {
+      throw new Error('NEXT_PUBLIC_MP_PUBLIC_KEY no está configurado en el servidor');
+    }
+    
+    console.log('🔑 Access token configurado: SÍ');
+    console.log('🔑 Public key configurado: SÍ');
+    console.log('🌍 Modo:', accessToken.startsWith('TEST-') ? 'PRUEBA' : 'PRODUCCIÓN');
     
     const session = await auth();
     
@@ -163,7 +183,7 @@ export async function createAnnualSubscription(paymentData: PaymentData) {
     }
 
     // Determinar si estamos en modo de prueba
-    const isTestMode = process.env.MERCADO_PAGO_ACCESS_TOKEN?.startsWith('TEST-');
+    const isTestMode = accessToken.startsWith('TEST-');
     
     // Para el entorno de prueba, usar nombre que apruebe el pago, pero mantener el email real del usuario
     const testCardholderName = isTestMode ? 'APRO' : paymentData.cardholderName;

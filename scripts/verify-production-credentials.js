@@ -1,3 +1,10 @@
+// Cargar variables de entorno
+try {
+  require('dotenv').config({ path: '.env.local' });
+} catch (error) {
+  console.log('⚠️  dotenv no disponible, usando variables del sistema');
+}
+
 const { MercadoPagoConfig, Payment } = require('mercadopago');
 
 // Configuración de Mercado Pago - PRODUCCIÓN

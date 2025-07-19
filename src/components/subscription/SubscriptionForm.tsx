@@ -13,11 +13,13 @@ import { useRouter } from 'next/navigation';
 import { LoaderIcon, toast } from 'react-hot-toast';
 
 // Inicializar Mercado Pago
-if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_MP_PUBLIC_KEY) {
-  console.log('🔑 Inicializando Mercado Pago con public key:', process.env.NEXT_PUBLIC_MP_PUBLIC_KEY.substring(0, 20) + '...');
-  initMercadoPago(process.env.NEXT_PUBLIC_MP_PUBLIC_KEY);
+const publicKey = process.env.NEXT_PUBLIC_MP_PUBLIC_KEY;
+if (typeof window !== 'undefined' && publicKey) {
+  console.log('🔑 Inicializando Mercado Pago con public key:', publicKey.substring(0, 20) + '...');
+  initMercadoPago(publicKey);
 } else {
   console.error('❌ No se encontró NEXT_PUBLIC_MP_PUBLIC_KEY en las variables de entorno');
+  console.error('🔧 Configura NEXT_PUBLIC_MP_PUBLIC_KEY en tu servidor de producción');
 }
 
 interface SubscriptionFormProps {

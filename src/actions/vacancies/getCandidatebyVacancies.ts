@@ -19,9 +19,7 @@ export const getCandidatesByVacancy = async (vacanteId: string) => {
     const matches = await prisma.matches.findMany({
       where: {
         vacanteId,
-        // Solo mostrar matches donde la empresa mostró interés
-        empresaInteresada: true,
-        // Y el candidato envió su información
+        // Mostrar todos los candidatos que se postularon
         candidatoEnvioInfo: true
       },
       include: {
@@ -64,5 +62,5 @@ export const getCandidatesByVacancy = async (vacanteId: string) => {
       error: 'Error al obtener los candidatos'
     };
   }
-}
+};
 

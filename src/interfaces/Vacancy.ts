@@ -19,6 +19,9 @@ export interface VacantesInterface {
     ubicacion: string;
   };
   match?: number;
+  analisis?: string | null;
+  areas_mejora?: string[] | null;
+  habilidades_match?: any;
 }
 
 export interface JobCardVacancy {
@@ -31,4 +34,11 @@ export interface JobCardVacancy {
   description?: string;
   tipoEmpleo?: string;
   fechaPublicacion?: string;
+  analisis?: string | null;
+  areas_mejora?: string[] | null;
+  habilidades_match?: any;
+  // Campos de estado de postulación
+  yaPostulado?: boolean;
+  fechaPostulacion?: Date | null;
+  empresaInteresada?: boolean;
 }

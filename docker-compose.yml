@@ -11,3 +11,16 @@ services:
       - ./postgres:/var/lib/postgresql/data
     ports:
       - 5432:5432
+
+  # API de matching (opcional - descomenta si tienes la API)
+  # matching-api:
+  #   build: ./matching-api  # Ajusta la ruta según donde tengas tu API
+  #   restart: always
+  #   ports:
+  #     - 8000:8000
+  #   environment:
+  #     - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@postgres-db:5432/${DB_NAME}
+  #   depends_on:
+  #     - postgres-db
+  #   volumes:
+  #     - ./matching-api:/app  # Ajusta según tu estructura

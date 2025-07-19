@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import type { Metadata } from "next";
+import { checkActiveSubscription } from "@/actions";
 
 export const metadata: Metadata = {
   title: " LTC ",
@@ -18,6 +19,13 @@ export default async function CandidateLayout({ children }: { children: ReactNod
   // Si el usuario es una empresa, redirigir a su sección
   if (session.user.rol === 'empresa') {
     redirect("/home/company");
+  }
+
+  // Verificar si el usuario tiene una suscripción activa
+  const subscriptionStatus = await checkActiveSubscription();
+  
+  if (!subscriptionStatus.hasActiveSubscription) {
+    redirect("/subscription/checkout");
   }
 
   return <>{children}</>;

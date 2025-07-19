@@ -16,7 +16,7 @@ export function LogoutButton({
 }: LogoutButtonProps) {
   const handleLogout = async () => {
     await logout();
-    window.location.replace("/auth/login");
+    // No necesitamos redirección manual, NextAuth se encarga de esto
   };
 
   const baseClasses = "inline-flex gap-2 items-center font-medium rounded-lg transition-colors touch-manipulation";

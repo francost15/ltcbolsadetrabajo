@@ -13,14 +13,20 @@ import { useRouter } from 'next/navigation';
 import { LoaderIcon, toast } from 'react-hot-toast';
 import { getMercadoPagoPublicKey } from '@/config/mercado-pago-client';
 
-// Inicializar Mercado Pago
-const publicKey = getMercadoPagoPublicKey();
-
-if (typeof window !== 'undefined') {
-  console.log('🔑 Inicializando Mercado Pago con public key:', publicKey.substring(0, 20) + '...');
-  initMercadoPago(publicKey);
-} else {
-  console.log('🔧 Mercado Pago se inicializará en el cliente');
+// Inicializar Mercado Pago de forma segura
+let publicKey: string;
+try {
+  publicKey = getMercadoPagoPublicKey();
+  
+  if (typeof window !== 'undefined') {
+    console.log('🔑 Inicializando Mercado Pago con public key:', publicKey.substring(0, 20) + '...');
+    initMercadoPago(publicKey);
+  } else {
+    console.log('🔧 Mercado Pago se inicializará en el cliente');
+  }
+} catch (error) {
+  console.error('❌ Error al inicializar Mercado Pago:', error);
+  // No fallar la aplicación si Mercado Pago no está configurado
 }
 
 interface SubscriptionFormProps {

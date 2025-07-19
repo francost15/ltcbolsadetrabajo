@@ -177,7 +177,7 @@ export async function createAnnualSubscription(paymentData: PaymentData) {
       isTestMode
     });
 
-    const paymentClient = getMercadoPagoClient();
+    const paymentClient = await getMercadoPagoClient();
     const payment = await paymentClient.create({
       body: {
         payer: {

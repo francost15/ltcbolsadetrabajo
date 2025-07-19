@@ -10,6 +10,8 @@ export const authConfig: NextAuthConfig = {
     signIn: "/auth/login",
     newUser: "/auth/register",
   },
+  // Configurar la URL base para redirecciones
+  basePath: "/api/auth",
 
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {

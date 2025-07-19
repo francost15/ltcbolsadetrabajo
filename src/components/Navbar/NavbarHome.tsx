@@ -45,7 +45,7 @@ const DesktopDropdown = ({ type, label }: { type: 'login' | 'register', label: s
           <DropdownItem href={isRegister ? `${baseUrl}/company` : baseUrl} icon={IoBusiness}>
             Como Empresa
           </DropdownItem>
-          <DropdownItem href={isRegister ? `${baseUrl}/404` : baseUrl} icon={IoPerson}>
+          <DropdownItem href={isRegister ? `${baseUrl}/candidate` : baseUrl} icon={IoPerson}>
             Como Candidato
           </DropdownItem>
         </div>
@@ -106,7 +106,7 @@ const MobileMenu = ({ onClose }: { onClose: () => void }) => {
                 Como Empresa
               </Link>
               <Link 
-                href="/404" 
+                href="/auth/register/candidate" 
                 className="flex items-center w-full px-4 py-3 text-sm text-gray-600 hover:text-gray-900 rounded-xl hover:bg-gray-50 transition-all duration-200"
               >
                 <IoPerson className="mr-3 w-5 h-5 text-gray-400" />
@@ -155,7 +155,12 @@ export const NavbarHome = () => {
 
           {/* Desktop Auth Buttons */}
           <div className="hidden md:flex md:items-center md:space-x-4">
-            <DesktopDropdown type="login" label="Iniciar Sesión" />
+            <Link 
+              href="/auth/login"
+              className="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-800 hover:text-blue-900 transition-all duration-200"
+            >
+              Iniciar Sesión
+            </Link>
             <DesktopDropdown type="register" label="Registrarse" />
           </div>
 

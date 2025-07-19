@@ -2,6 +2,7 @@
 
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
+import { getMatchFromAPI } from "./getMatchFromAPI";
 
 export async function applyToVacancy(vacancyId: string) {
   try {
@@ -27,6 +28,33 @@ export async function applyToVacancy(vacancyId: string) {
       };
     }
 
+    // Obtener la vacante
+    const vacante = await prisma.vacantes.findUnique({
+      where: {
+        id: vacancyId
+      }
+    });
+
+    if (!vacante) {
+      return {
+        ok: false,
+        message: "Vacante no encontrada"
+      };
+    }
+
+    // Obtener el match desde la API de Python
+    const matchResponse = await getMatchFromAPI(vacancyId);
+    let porcentajeMatch = 0;
+
+    if (matchResponse.ok) {
+      porcentajeMatch = matchResponse.match;
+      console.log(`🎯 Match obtenido desde API de Python para ${candidato.nombre} en ${vacante.titulo}: ${porcentajeMatch}%`);
+    } else {
+      console.log(`⚠️ No se pudo obtener match desde API: ${matchResponse.message}`);
+      // Si no se puede obtener desde la API, usar 0 como fallback
+      porcentajeMatch = 0;
+    }
+
     // Buscar el match existente
     const existingMatch = await prisma.matches.findUnique({
       where: {
@@ -38,19 +66,19 @@ export async function applyToVacancy(vacancyId: string) {
     });
 
     if (!existingMatch) {
-      // Si no existe el match, lo creamos
+      // Si no existe el match, lo creamos con el porcentaje de la API
       await prisma.matches.create({
         data: {
           candidatoId: candidato.id,
           vacanteId: vacancyId,
-          porcentajeMatch: 0,
+          porcentajeMatch: porcentajeMatch,
           empresaInteresada: false,
           candidatoEnvioInfo: true,
           fechaCandidatoEnvio: new Date()
         }
       });
     } else {
-      // Si existe, lo actualizamos
+      // Si existe, lo actualizamos con el nuevo porcentaje de la API
       await prisma.matches.update({
         where: {
           candidatoId_vacanteId: {
@@ -59,6 +87,7 @@ export async function applyToVacancy(vacancyId: string) {
           }
         },
         data: {
+          porcentajeMatch: porcentajeMatch,
           candidatoEnvioInfo: true,
           fechaCandidatoEnvio: new Date()
         }
@@ -67,7 +96,8 @@ export async function applyToVacancy(vacancyId: string) {
 
     return {
       ok: true,
-      message: "Postulación enviada exitosamente"
+      message: `Postulación enviada exitosamente. Tu match con esta vacante es del ${porcentajeMatch}%`,
+      porcentajeMatch: porcentajeMatch
     };
 
   } catch (error) {

@@ -1,82 +1,132 @@
-const fs = require('fs');
-const path = require('path');
+console.log('🔍 Verificando variables de entorno en producción...\n');
 
-console.log('🔍 Verificando configuración de producción...\n');
+const requiredEnvVars = {
+  // Base de datos
+  'DATABASE_URL': 'URL de conexión a PostgreSQL',
+  
+  // NextAuth
+  'NEXTAUTH_URL': 'URL de la aplicación',
+  'NEXTAUTH_SECRET': 'Clave secreta para NextAuth',
+  
+  // Mercado Pago
+  'MP_ACCESS_TOKEN': 'Token de acceso de Mercado Pago',
+  'NEXT_PUBLIC_MP_PUBLIC_KEY': 'Clave pública de Mercado Pago (frontend)',
+  
+  // API de Python
+  'PYTHON_API_URL': 'URL de la API de Python para matching',
+  
+  // Email (opcional)
+  'EMAIL_SERVER_HOST': 'Servidor de email (opcional)',
+  'EMAIL_SERVER_PORT': 'Puerto de email (opcional)',
+  'EMAIL_SERVER_USER': 'Usuario de email (opcional)',
+  'EMAIL_SERVER_PASSWORD': 'Contraseña de email (opcional)',
+  
+  // Entorno
+  'NODE_ENV': 'Entorno de ejecución'
+};
 
-// Verificar archivos de entorno
-const envFiles = ['.env', '.env.local', '.env.production'];
-let envFound = false;
+const optionalEnvVars = {
+  'EMAIL_SERVER_HOST': true,
+  'EMAIL_SERVER_PORT': true,
+  'EMAIL_SERVER_USER': true,
+  'EMAIL_SERVER_PASSWORD': true
+};
 
-envFiles.forEach(file => {
-  const filePath = path.join(process.cwd(), file);
-  if (fs.existsSync(filePath)) {
-    console.log(`✅ ${file} existe`);
-    envFound = true;
+console.log('📋 Variables de entorno requeridas:');
+console.log('─'.repeat(60));
+
+let missingVars = [];
+let presentVars = [];
+
+for (const [varName, description] of Object.entries(requiredEnvVars)) {
+  const value = process.env[varName];
+  const isOptional = optionalEnvVars[varName];
+  
+  if (value) {
+    // Ocultar valores sensibles
+    const displayValue = varName.includes('SECRET') || varName.includes('TOKEN') || varName.includes('PASSWORD') 
+      ? '***' + value.slice(-4) 
+      : value;
     
-    try {
-      const content = fs.readFileSync(filePath, 'utf8');
-      const lines = content.split('\n');
-      
-      const hasAccessToken = lines.some(line => line.includes('MERCADO_PAGO_ACCESS_TOKEN'));
-      const hasPublicKey = lines.some(line => line.includes('NEXT_PUBLIC_MP_PUBLIC_KEY'));
-      
-      console.log(`   🔑 MERCADO_PAGO_ACCESS_TOKEN: ${hasAccessToken ? '✅' : '❌'}`);
-      console.log(`   🔑 NEXT_PUBLIC_MP_PUBLIC_KEY: ${hasPublicKey ? '✅' : '❌'}`);
-      
-      if (hasAccessToken) {
-        const accessTokenLine = lines.find(line => line.includes('MERCADO_PAGO_ACCESS_TOKEN'));
-        const token = accessTokenLine.split('=')[1]?.replace(/['"]/g, '');
-        if (token) {
-          console.log(`   📋 Token: ${token.substring(0, 20)}...`);
-          console.log(`   🌍 Tipo: ${token.startsWith('APP_USR-') ? 'PRODUCCIÓN' : token.startsWith('TEST-') ? 'PRUEBA' : 'DESCONOCIDO'}`);
-        }
-      }
-      
-    } catch (error) {
-      console.log(`   ❌ Error leyendo ${file}:`, error.message);
-    }
+    console.log(`✅ ${varName}: ${displayValue}`);
+    presentVars.push(varName);
+  } else if (isOptional) {
+    console.log(`⚠️  ${varName}: No definida (opcional)`);
   } else {
-    console.log(`❌ ${file} no existe`);
+    console.log(`❌ ${varName}: No definida`);
+    missingVars.push(varName);
   }
-});
-
-// Verificar variables del sistema
-console.log('\n🔧 Variables del sistema:');
-const accessToken = process.env.MERCADO_PAGO_ACCESS_TOKEN;
-const publicKey = process.env.NEXT_PUBLIC_MP_PUBLIC_KEY;
-
-console.log(`🔑 MERCADO_PAGO_ACCESS_TOKEN: ${accessToken ? '✅ Configurado' : '❌ No configurado'}`);
-console.log(`🔑 NEXT_PUBLIC_MP_PUBLIC_KEY: ${publicKey ? '✅ Configurado' : '❌ No configurado'}`);
-
-if (accessToken) {
-  console.log(`   📋 Token: ${accessToken.substring(0, 20)}...`);
-  console.log(`   🌍 Tipo: ${accessToken.startsWith('APP_USR-') ? 'PRODUCCIÓN' : accessToken.startsWith('TEST-') ? 'PRUEBA' : 'DESCONOCIDO'}`);
 }
 
-if (publicKey) {
-  console.log(`   📋 Public Key: ${publicKey.substring(0, 20)}...`);
-  console.log(`   🌍 Tipo: ${publicKey.startsWith('APP_USR-') ? 'PRODUCCIÓN' : publicKey.startsWith('TEST-') ? 'PRUEBA' : 'DESCONOCIDO'}`);
-}
+console.log('\n📊 Resumen:');
+console.log('─'.repeat(30));
 
-// Resumen
-console.log('\n📊 RESUMEN:');
-if (accessToken && publicKey) {
-  console.log('✅ Configuración completa - Mercado Pago debería funcionar');
-} else if (accessToken || publicKey) {
-  console.log('⚠️  Configuración parcial - Falta una variable');
+if (missingVars.length === 0) {
+  console.log('✅ Todas las variables requeridas están definidas');
 } else {
-  console.log('❌ Configuración faltante - Mercado Pago no funcionará');
+  console.log(`❌ Faltan ${missingVars.length} variable(s) requerida(s):`);
+  missingVars.forEach(varName => {
+    console.log(`   - ${varName}: ${requiredEnvVars[varName]}`);
+  });
 }
 
-if (!envFound && !accessToken && !publicKey) {
-  console.log('\n🔧 SOLUCIÓN:');
-  console.log('1. Crear archivo .env en la raíz del proyecto:');
-  console.log(`
-MERCADO_PAGO_ACCESS_TOKEN=APP_USR-5564120413015489-071420-1b2ce7f60194e3362bd7e70b0d815040-180048755
-NEXT_PUBLIC_MP_PUBLIC_KEY=APP_USR-ea8fc03d-b256-479d-8466-780d0a09c9df
-  `);
-  console.log('2. O configurar variables del sistema:');
-  console.log('   export MERCADO_PAGO_ACCESS_TOKEN="APP_USR-5564120413015489-071420-1b2ce7f60194e3362bd7e70b0d815040-180048755"');
-  console.log('   export NEXT_PUBLIC_MP_PUBLIC_KEY="APP_USR-ea8fc03d-b256-479d-8466-780d0a09c9df"');
-  console.log('3. Reiniciar PM2: pm2 restart ltcbolsa');
-} 
+console.log(`📈 Variables definidas: ${presentVars.length}/${Object.keys(requiredEnvVars).length}`);
+
+// Verificaciones específicas
+console.log('\n🔧 Verificaciones específicas:');
+console.log('─'.repeat(30));
+
+// Verificar DATABASE_URL
+if (process.env.DATABASE_URL) {
+  const dbUrl = process.env.DATABASE_URL;
+  if (dbUrl.includes('localhost') || dbUrl.includes('127.0.0.1')) {
+    console.log('⚠️  DATABASE_URL apunta a localhost - verificar si es correcto para producción');
+  } else {
+    console.log('✅ DATABASE_URL apunta a servidor remoto');
+  }
+}
+
+// Verificar NEXTAUTH_URL
+if (process.env.NEXTAUTH_URL) {
+  const authUrl = process.env.NEXTAUTH_URL;
+  if (authUrl.includes('localhost') || authUrl.includes('127.0.0.1')) {
+    console.log('⚠️  NEXTAUTH_URL apunta a localhost - verificar si es correcto para producción');
+  } else {
+    console.log('✅ NEXTAUTH_URL apunta a servidor remoto');
+  }
+}
+
+// Verificar PYTHON_API_URL
+if (process.env.PYTHON_API_URL) {
+  const pythonUrl = process.env.PYTHON_API_URL;
+  if (pythonUrl.includes('localhost') || pythonUrl.includes('127.0.0.1')) {
+    console.log('⚠️  PYTHON_API_URL apunta a localhost - verificar si es correcto para producción');
+  } else {
+    console.log('✅ PYTHON_API_URL apunta a servidor remoto');
+  }
+}
+
+// Verificar NODE_ENV
+if (process.env.NODE_ENV === 'production') {
+  console.log('✅ NODE_ENV está configurado para producción');
+} else {
+  console.log(`⚠️  NODE_ENV está configurado como: ${process.env.NODE_ENV || 'No definido'}`);
+}
+
+console.log('\n💡 Recomendaciones:');
+console.log('─'.repeat(20));
+
+if (missingVars.length > 0) {
+  console.log('1. Definir todas las variables faltantes en el archivo .env');
+  console.log('2. Reiniciar la aplicación después de agregar las variables');
+}
+
+if (process.env.NODE_ENV !== 'production') {
+  console.log('3. Configurar NODE_ENV=production en producción');
+}
+
+console.log('4. Verificar que PYTHON_API_URL apunte al servidor correcto');
+console.log('5. Asegurar que DATABASE_URL apunte a la base de datos de producción');
+console.log('6. Verificar que las credenciales de Mercado Pago sean de producción');
+
+console.log('\n🚀 Script completado'); 

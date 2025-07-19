@@ -1,12 +1,18 @@
 import { ReactNode } from "react";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { checkActiveSubscription } from "@/actions";
 
 export const metadata: Metadata = {
   title: " LTC ",
   description: "La sección de candidato en LTC Project permite encontrar el mejor talento para ti",
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default async function CandidateLayout({ children }: { children: ReactNode }) {

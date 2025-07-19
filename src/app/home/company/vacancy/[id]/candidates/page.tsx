@@ -75,7 +75,9 @@ export default function CandidatesPage({ params }: Props) {
           return;
         }
 
-        setCandidates(candidatesResponse.candidates || []);
+        // Ordenar candidatos por porcentaje de match (descendente)
+        const sortedCandidates = (candidatesResponse.candidates || []).sort((a, b) => b.porcentajeMatch - a.porcentajeMatch);
+        setCandidates(sortedCandidates);
       } catch (err) {
         console.error('Error fetching data:', err);
         setError('Error al cargar los datos');
@@ -140,25 +142,51 @@ export default function CandidatesPage({ params }: Props) {
         ) : (
           <>
             <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-              <div className="flex items-center">
-                <svg className="h-5 w-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span className="text-green-800 font-medium">
-                  {candidates.length} candidato{candidates.length !== 1 ? 's' : ''} se ha{candidates.length !== 1 ? 'n' : ''} postulado a esta vacante
-                </span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center">
+                  <svg className="h-5 w-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-green-800 font-medium">
+                    {candidates.length} candidato{candidates.length !== 1 ? 's' : ''} se ha{candidates.length !== 1 ? 'n' : ''} postulado a esta vacante
+                  </span>
+                </div>
+                <div className="text-sm text-green-700">
+                  <span className="font-medium">Match promedio:</span> {Math.round(candidates.reduce((sum, c) => sum + c.porcentajeMatch, 0) / candidates.length)}%
+                </div>
+              </div>
+              <div className="mt-2 text-sm text-green-700">
+                <span className="font-medium">Mejor match:</span> {Math.max(...candidates.map(c => c.porcentajeMatch))}% | 
+                <span className="font-medium ml-2">Candidatos con 60%+:</span> {candidates.filter(c => c.porcentajeMatch >= 60).length}
+              </div>
+              <div className="mt-2 text-xs text-green-600">
+                <span className="font-medium">💡 Los candidatos están ordenados por porcentaje de match (mayor a menor)</span>
               </div>
             </div>
             
             <div className="grid gap-6 md:grid-cols-2">
-              {candidates.map((candidate) => (
-                <div key={candidate.id} className="bg-white rounded-lg shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow">
-                  <div className="flex items-start justify-between">
+              {candidates.map((candidate, index) => (
+                <div key={candidate.id} className="bg-white rounded-lg shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow relative">
+                  {/* Indicador de posición */}
+                  <div className="absolute top-4 left-4 w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-sm font-bold text-gray-600">
+                    #{index + 1}
+                  </div>
+                  <div className="flex items-start justify-between mt-2">
                     <div className="flex-1">
                       <h3 className="text-xl font-semibold text-gray-900">{candidate.nombre}</h3>
                       {candidate.tituloProfesional && (
                         <p className="text-gray-600 mt-1 font-medium">{candidate.tituloProfesional}</p>
                       )}
+                    </div>
+                    <div className="ml-4">
+                      <div className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                        candidate.porcentajeMatch >= 80 ? 'bg-green-100 text-green-800' :
+                        candidate.porcentajeMatch >= 60 ? 'bg-blue-100 text-blue-800' :
+                        candidate.porcentajeMatch >= 40 ? 'bg-yellow-100 text-yellow-800' :
+                        'bg-red-100 text-red-800'
+                      }`}>
+                        {candidate.porcentajeMatch}% Match
+                      </div>
                     </div>
                   </div>
 

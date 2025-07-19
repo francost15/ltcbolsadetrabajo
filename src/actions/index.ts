@@ -8,6 +8,7 @@ export * from './company/getCompanyByUserId';
 export * from './profile/getProfile';
 export { checkProfileCompleteness, getCandidateProfile } from './profile/getProfile';
 export * from './vacancies/applyToVacancy';
+export * from './vacancies/getMatchFromAPI';
 export * from './vacancies/createVacancy';
 export * from './vacancies/deleteVacancy';
 export * from './vacancies/editVacancy';

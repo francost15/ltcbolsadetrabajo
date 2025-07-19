@@ -1,5 +1,5 @@
 // Configuración simple para API de Python existente
-export const PYTHON_API_URL = process.env.NEXT_PUBLIC_MATCHING_API_URL || 'http://localhost:8000';
+export const PYTHON_API_URL = process.env.NEXT_PUBLIC_MATCHING_API_URL || 'https://ltc-backend-z0l6.onrender.com';
 
 export const API_ENDPOINTS = {
   HEALTH: `${PYTHON_API_URL}/health`,

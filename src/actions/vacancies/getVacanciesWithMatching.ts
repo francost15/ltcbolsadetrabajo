@@ -35,14 +35,8 @@ export const getVacanciesWithMatching = async () => {
       };
     }
 
-    if (!candidato.curriculum) {
-      console.log('⚠️ El candidato no tiene CV subido');
-      return {
-        ok: true,
-        vacantes: [],
-        message: "Por favor, sube tu CV primero para ver vacantes que coincidan con tu perfil"
-      };
-    }
+    // --- Eliminada la validación de curriculum ---
+    // Ahora siempre consulta la API de Python, tenga o no CV el usuario
 
     // Intentar conectar con tu API de Python
     try {

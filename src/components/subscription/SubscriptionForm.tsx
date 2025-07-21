@@ -17,12 +17,12 @@ import { getMercadoPagoPublicKey } from '@/config/mercado-pago-client';
 let publicKey: string;
 try {
   publicKey = getMercadoPagoPublicKey();
-  
-  if (typeof window !== 'undefined') {
-    console.log('🔑 Inicializando Mercado Pago con public key:', publicKey.substring(0, 20) + '...');
-    initMercadoPago(publicKey);
-  } else {
-    console.log('🔧 Mercado Pago se inicializará en el cliente');
+
+if (typeof window !== 'undefined') {
+  console.log('🔑 Inicializando Mercado Pago con public key:', publicKey.substring(0, 20) + '...');
+  initMercadoPago(publicKey);
+} else {
+  console.log('🔧 Mercado Pago se inicializará en el cliente');
   }
 } catch (error) {
   console.error('❌ Error al inicializar Mercado Pago:', error);

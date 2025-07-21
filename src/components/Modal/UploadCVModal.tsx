@@ -52,13 +52,17 @@ export function UploadCVModal({ isOpen, onClose, onSuccess }: UploadCVModalProps
         throw new Error('Usuario no autenticado');
       }
 
-      console.log('🐍 Subiendo CV a API de Python...');
-      console.log('📄 Usuario ID:', session.user.id);
-      console.log('📎 Archivo:', file.name, file.type, file.size);
-
-      // Crear FormData
+      // --- LOG DE DEPURACIÓN DEL FORM DATA ---
       const formData = new FormData();
       formData.append('file', file);
+      // Log para verificar el contenido del FormData
+      for (const [key, value] of formData.entries()) {
+        if (value instanceof File) {
+          console.log(`[FormData] key: ${key}, name: ${value.name}, type: ${value.type}, size: ${value.size}`);
+        } else {
+          console.log(`[FormData] key: ${key}, value: ${value}`);
+        }
+      }
 
       // Subir a la API de Python
       const response = await createRequest(
@@ -76,20 +80,37 @@ export function UploadCVModal({ isOpen, onClose, onSuccess }: UploadCVModalProps
       if (!response.ok) {
         const errorText = await response.text();
         console.error('❌ Error en upload:', response.status, errorText);
-        
+
+        // Manejo de errores específicos del backend
         if (response.status === 400) {
-          if (errorText.includes('archivo')) {
-            throw new Error('Error en el archivo: ' + errorText);
+          if (errorText.includes('NO_FILE')) {
+            toast.error('No se encontró archivo en la solicitud. Asegúrate de seleccionar un archivo válido.');
+            return;
+          } else if (errorText.includes('EMPTY_FILENAME')) {
+            toast.error('El archivo no tiene nombre.');
+            return;
+          } else if (errorText.includes('INVALID_FORMAT')) {
+            toast.error('Formato de archivo no válido. Solo PDF, DOC o DOCX.');
+            return;
+          } else if (errorText.includes('EMPTY_FILE')) {
+            toast.error('El archivo está vacío.');
+            return;
+          } else if (errorText.includes('archivo')) {
+            toast.error('Error en el archivo: ' + errorText);
+            return;
           } else if (errorText.includes('formato')) {
-            throw new Error('Formato de archivo no válido');
+            toast.error('Formato de archivo no válido');
+            return;
           }
         } else if (response.status === 404) {
-          throw new Error('Endpoint no encontrado en la API');
+          toast.error('Endpoint no encontrado en la API');
+          return;
         } else if (response.status >= 500) {
-          throw new Error('Error del servidor en la API de Python');
+          toast.error('Error del servidor en la API de Python');
+          return;
         }
-        
-        throw new Error(`Error ${response.status}: ${errorText || 'Error desconocido'}`);
+        toast.error(`Error ${response.status}: ${errorText || 'Error desconocido'}`);
+        return;
       }
 
       const result = await response.json();
@@ -102,7 +123,6 @@ export function UploadCVModal({ isOpen, onClose, onSuccess }: UploadCVModalProps
 
     } catch (error) {
       console.error('❌ Error subiendo CV:', error);
-      
       if (error instanceof Error) {
         if (error.message.includes('fetch') || error.message.includes('abort')) {
           toast.error('🔌 No se pudo conectar con la API de Python.\n\nVerifica que esté corriendo en puerto 8000');
@@ -174,7 +194,7 @@ export function UploadCVModal({ isOpen, onClose, onSuccess }: UploadCVModalProps
             <div className="bg-green-50 p-3 rounded-lg">
               <div className="flex items-center">
                 <svg className="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 8 8 0 0118 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" />
                 </svg>
                 <span className="text-sm text-green-800">
                   Archivo seleccionado: {file.name}

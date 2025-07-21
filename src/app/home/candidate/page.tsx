@@ -189,27 +189,23 @@ export default function CandidatePage() {
   }
 
   const getEmptyStateContent = () => {
-    if (matchingStatus.message?.includes("sube tu CV")) {
+    // Si hay vacantes/matches, no mostrar mensaje de subir CV
+    if (vacancies.length > 0) {
+      return null;
+    }
+    // Si el backend explícitamente manda un mensaje de CV, lo mostramos
+    if (matchingStatus.message?.toLowerCase().includes("sube tu cv")) {
       return {
         title: "Sube tu CV para comenzar",
         message: "Para poder recomendarte las mejores vacantes que coincidan con tu perfil, necesitamos que subas tu CV primero.",
         showNotification: false
       };
     }
-
-    if (matchingStatus.message?.includes("score >= 60%")) {
-      return {
-        title: "No hay matches perfectos por ahora",
-        message: "En este momento no hay vacantes que coincidan al 60% o más con tu perfil, pero estamos trabajando para encontrar las mejores oportunidades para ti.",
-        showNotification: true
-      };
-    }
-
-    // Mensaje por defecto para cualquier caso (incluyendo fallback)
+    // Mensaje por defecto si no hay matches
     return {
       title: "No hay vacantes disponibles",
-      message: "No hay vacantes disponibles en este momento que coincidan con tu perfil, pero en cuanto tengamos nuevas oportunidades perfectas para ti, te notificaremos inmediatamente.",
-      showNotification: true
+      message: "No hay vacantes disponibles en este momento que coincidan con tu perfil.",
+      showNotification: false
     };
   };
 
@@ -228,9 +224,9 @@ export default function CandidatePage() {
             const content = getEmptyStateContent();
             return (
               <EmptyState 
-                title={content.title}
-                message={content.message}
-                showNotification={content.showNotification}
+                title={content?.title || "No hay resultados"}
+                message={content?.message || "No hay vacantes disponibles en este momento que coincidan con tu perfil."}
+                showNotification={content?.showNotification || false}
               />
             );
           })()

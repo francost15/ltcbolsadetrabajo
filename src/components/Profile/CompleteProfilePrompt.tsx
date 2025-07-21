@@ -3,7 +3,6 @@ import { IoWarningOutline, IoPersonAddOutline, IoDocumentTextOutline } from 'rea
 
 interface CompleteProfilePromptProps {
   missingFields: string[];
-  hasCV: boolean;
   hasExperience: boolean;
   hasEducation: boolean;
   hasBasicInfo: boolean;
@@ -11,7 +10,6 @@ interface CompleteProfilePromptProps {
 
 export default function CompleteProfilePrompt({ 
   missingFields, 
-  hasCV, 
   hasExperience, 
   hasEducation, 
   hasBasicInfo 
@@ -36,17 +34,7 @@ export default function CompleteProfilePrompt({
           </p>
 
           {/* Estado del perfil */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div className={`p-4 rounded-lg border-2 ${hasCV ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}>
-              <IoDocumentTextOutline className={`h-8 w-8 mx-auto mb-2 ${hasCV ? 'text-green-600' : 'text-red-600'}`} />
-              <p className={`font-medium ${hasCV ? 'text-green-800' : 'text-red-800'}`}>
-                CV/Currículum
-              </p>
-              <p className={`text-sm ${hasCV ? 'text-green-600' : 'text-red-600'}`}>
-                {hasCV ? 'Completado ✓' : 'Pendiente'}
-              </p>
-            </div>
-
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             <div className={`p-4 rounded-lg border-2 ${hasBasicInfo ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}>
               <IoPersonAddOutline className={`h-8 w-8 mx-auto mb-2 ${hasBasicInfo ? 'text-green-600' : 'text-red-600'}`} />
               <p className={`font-medium ${hasBasicInfo ? 'text-green-800' : 'text-red-800'}`}>

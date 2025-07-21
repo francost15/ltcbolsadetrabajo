@@ -92,7 +92,7 @@ export async function checkProfileCompleteness() {
       return {
         isComplete: false,
         missingFields: ['Autenticación requerida'],
-        hasCV: false,
+
         hasExperience: false,
         hasEducation: false,
         hasBasicInfo: false
@@ -111,7 +111,6 @@ export async function checkProfileCompleteness() {
       return {
         isComplete: false,
         missingFields: ['Perfil de candidato no encontrado'],
-        hasCV: false,
         hasExperience: false,
         hasEducation: false,
         hasBasicInfo: false
@@ -120,10 +119,7 @@ export async function checkProfileCompleteness() {
 
     const missingFields: string[] = [];
 
-    // Verificar campos esenciales para matching
-    if (!candidato.curriculum) {
-      missingFields.push('CV/Currículum');
-    }
+
 
     if (!candidato.nombre || candidato.nombre.trim() === '') {
       missingFields.push('Nombre completo');
@@ -152,7 +148,6 @@ export async function checkProfileCompleteness() {
     return {
       isComplete: missingFields.length === 0,
       missingFields,
-      hasCV: !!candidato.curriculum,
       hasExperience: candidato.experiencias.length > 0,
       hasEducation: candidato.educaciones.length > 0,
       hasBasicInfo: !!(candidato.nombre && candidato.tituloProfesional && candidato.resumenProfesional)
@@ -163,7 +158,6 @@ export async function checkProfileCompleteness() {
     return {
       isComplete: false,
       missingFields: ['Error al verificar el perfil'],
-      hasCV: false,
       hasExperience: false,
       hasEducation: false,
       hasBasicInfo: false

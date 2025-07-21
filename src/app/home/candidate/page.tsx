@@ -101,7 +101,6 @@ export default function CandidatePage() {
   const [profileStatus, setProfileStatus] = useState<{
     isComplete: boolean;
     missingFields: string[];
-    hasCV: boolean;
     hasExperience: boolean;
     hasEducation: boolean;
     hasBasicInfo: boolean;
@@ -182,7 +181,6 @@ export default function CandidatePage() {
     return (
       <CompleteProfilePrompt
         missingFields={profileStatus.missingFields}
-        hasCV={profileStatus.hasCV}
         hasExperience={profileStatus.hasExperience}
         hasEducation={profileStatus.hasEducation}
         hasBasicInfo={profileStatus.hasBasicInfo}

@@ -20,16 +20,20 @@ export const createRequest = async (
 ) => {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
-  
+
+  // Detectar si el body es FormData
+  const isFormData = options.body instanceof FormData;
+  const headers = {
+    'Accept': 'application/json',
+    ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
+    ...options.headers,
+  };
+
   try {
     const response = await fetch(url, {
       ...options,
       signal: controller.signal,
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
+      headers,
     });
     
     clearTimeout(timeoutId);

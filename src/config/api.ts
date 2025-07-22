@@ -1,5 +1,11 @@
 // Configuración simple para API de Python existente
-export const PYTHON_API_URL = process.env.NEXT_PUBLIC_MATCHING_API_URL || 'fastapiltc-a9b7f9fqc8g5ghgw.canadacentral-01.azurewebsites.net';
+function ensureHttps(url: string) {
+  if (!/^https?:\/\//i.test(url)) {
+    return 'https://' + url;
+  }
+  return url;
+}
+export const PYTHON_API_URL = ensureHttps(process.env.NEXT_PUBLIC_MATCHING_API_URL || 'fastapiltc-a9b7f9fqc8g5ghgw.canadacentral-01.azurewebsites.net');
 
 export const API_ENDPOINTS = {
   HEALTH: `${PYTHON_API_URL}/health`,

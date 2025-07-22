@@ -105,6 +105,24 @@ export default function CandidatePage() {
     hasEducation: boolean;
     hasBasicInfo: boolean;
   } | null>(null);
+  const [rejectedVacancyIds, setRejectedVacancyIds] = useState<string[]>([]);
+
+  // Leer vacantes rechazadas de localStorage al cargar
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('rejectedVacancyIds');
+      if (stored) {
+        setRejectedVacancyIds(JSON.parse(stored));
+      }
+    }
+  }, []);
+
+  // Guardar en localStorage cuando cambian
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('rejectedVacancyIds', JSON.stringify(rejectedVacancyIds));
+    }
+  }, [rejectedVacancyIds]);
 
   useEffect(() => {
     const checkProfile = async () => {
@@ -125,17 +143,17 @@ export default function CandidatePage() {
         setLoading(true);
         const response = await getVacanciesWithMatching();
         console.log('📨 Respuesta recibida en frontend:', response);
-        
         // Guardar información del estado del matching
         setMatchingStatus({
           source: response.source,
           fallback: response.fallback,
           message: response.message,
         });
-        
         if (response.ok) {
           console.log('✅ Vacantes recibidas:', response.vacantes?.length || 0);
-          const transformedVacancies = (response.vacantes ?? []).map(transformVacancyToJobCard);
+          let transformedVacancies = (response.vacantes ?? []).map(transformVacancyToJobCard);
+          // Filtrar vacantes rechazadas
+          transformedVacancies = transformedVacancies.filter(v => !rejectedVacancyIds.includes(v.id));
           console.log('🔄 Vacantes transformadas:', transformedVacancies.length);
           setVacancies(transformedVacancies);
         } else {
@@ -149,23 +167,27 @@ export default function CandidatePage() {
         setLoading(false);
       }
     };
-
     // Solo fetchear datos si el perfil está completo
     if (profileStatus?.isComplete) {
       fetchData();
     } else {
       setLoading(false);
     }
-  }, [profileStatus]);
+  }, [profileStatus, rejectedVacancyIds]);
+
+  // Función para rechazar una vacante
+  const handleRejectVacancy = (id: string) => {
+    setRejectedVacancyIds(prev => Array.from(new Set([...prev, id])));
+  };
 
   // Función para refrescar datos después de una postulación exitosa
   const handleApplicationSuccess = async () => {
     try {
       console.log('🔄 Actualizando datos después de postulación exitosa...');
-      
       const response = await getVacanciesWithMatching();
       if (response.ok) {
-        const transformedVacancies = (response.vacantes ?? []).map(transformVacancyToJobCard);
+        let transformedVacancies = (response.vacantes ?? []).map(transformVacancyToJobCard);
+        transformedVacancies = transformedVacancies.filter(v => !rejectedVacancyIds.includes(v.id));
         setVacancies(transformedVacancies);
         console.log('✅ Datos actualizados exitosamente');
       }
@@ -235,6 +257,7 @@ export default function CandidatePage() {
             <JobCards
               key={vacancy.id}
               {...vacancy}
+              onReject={handleRejectVacancy}
               onApplicationSuccess={handleApplicationSuccess}
             />
           ))

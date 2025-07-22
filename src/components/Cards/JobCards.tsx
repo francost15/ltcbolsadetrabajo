@@ -67,6 +67,7 @@ export const JobCards = ({
   fechaPostulacion,
   empresaInteresada,
   onApplicationSuccess,
+  onReject,
 }: Job) => {
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
   const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
@@ -167,6 +168,10 @@ export const JobCards = ({
             vacancyId={id}
             vacancyTitle={title}
             onCloseModal={() => setIsRejectModalOpen(false)}
+            onConfirmReject={() => {
+              if (onReject) onReject(id);
+              setIsRejectModalOpen(false);
+            }}
           />
 
           <ApplyVacancyModal

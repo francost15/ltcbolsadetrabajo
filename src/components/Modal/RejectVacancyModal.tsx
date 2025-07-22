@@ -8,9 +8,10 @@ interface RejectVacancyModalProps {
   vacancyId: string;
   vacancyTitle: string;
   onCloseModal?: () => void;
+  onConfirmReject?: () => void;
 }
 
-export default function RejectVacancyModal({ isOpen, vacancyId, vacancyTitle, onCloseModal }: RejectVacancyModalProps) {
+export default function RejectVacancyModal({ isOpen, vacancyId, vacancyTitle, onCloseModal, onConfirmReject }: RejectVacancyModalProps) {
   const [isRejecting, setIsRejecting] = useState(false);
 
   if (!isOpen) return null;
@@ -26,8 +27,9 @@ export default function RejectVacancyModal({ isOpen, vacancyId, vacancyTitle, on
       
       if (response.ok) {
         alert(`Has rechazado exitosamente la vacante "${vacancyTitle}"`);
+        if (onConfirmReject) onConfirmReject();
         handleClose();
-        window.location.reload();
+        // window.location.reload(); // Ya no recargamos, el padre filtra
       } else {
         alert(`Error: ${response.message}`);
       }

@@ -7,8 +7,8 @@ Agrega estas variables a tu archivo `.env.local`:
 ```bash
 # Mercado Pago - PRODUCCIÓN
 # Credenciales de producción obtenidas de https://www.mercadopago.com.ar/developers/
-MERCADO_PAGO_ACCESS_TOKEN="APP_USR-5564120413015489-071420-1b2ce7f60194e3362bd7e70b0d815040-180048755"
-NEXT_PUBLIC_MP_PUBLIC_KEY="APP_USR-ea8fc03d-b256-479d-8466-780d0a09c9df"
+MERCADO_PAGO_ACCESS_TOKEN=
+NEXT_PUBLIC_MP_PUBLIC_KEY=
 
 # Claves de prueba (sandbox) - Comentadas para producción
 # MERCADO_PAGO_ACCESS_TOKEN="TEST-your-access-token-here"

@@ -2,6 +2,7 @@ import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { getUserSubscriptionStatus } from '@/actions';
 import SubscriptionForm from '@/components/subscription/SubscriptionForm';
+import ClipSubscriptionForm from '@/components/subscription/ClipSubscriptionForm';
 import prisma from '@/lib/prisma';
 import { Toaster } from 'react-hot-toast';
 import { Suspense } from 'react';
@@ -289,10 +290,16 @@ export default async function CheckoutPage() {
             {/* Formulario de pago */}
             <div className="lg:pl-4">
               <Suspense fallback={<FormSkeleton />}>
-                <SubscriptionForm 
+                {/* <SubscriptionForm 
                   userEmail={session.user.email || ''} 
                   planPrice={Number(plan.precio)}
-                />
+                /> */}
+
+                <ClipSubscriptionForm 
+  userEmail={session.user.email || ''} 
+  planPrice={Number(plan.precio)}
+/>
+
               </Suspense>
             </div>
           </div>

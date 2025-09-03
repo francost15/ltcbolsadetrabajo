@@ -1,12 +1,11 @@
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import { getUserSubscriptionStatus } from '@/actions';
-import SubscriptionForm from '@/components/subscription/SubscriptionForm';
-import ClipSubscriptionForm from '@/components/subscription/ClipSubscriptionForm';
+import ConektaSubscriptionForm from '@/components/subscription/ConektaSubscriptionButton';
 import prisma from '@/lib/prisma';
 import { Toaster } from 'react-hot-toast';
 import { Suspense } from 'react';
-import { IoShield, IoShieldOutline } from 'react-icons/io5';
+import { IoShieldOutline } from 'react-icons/io5';
 
 // Componente de loading skeleton
 function CheckoutSkeleton() {
@@ -290,16 +289,10 @@ export default async function CheckoutPage() {
             {/* Formulario de pago */}
             <div className="lg:pl-4">
               <Suspense fallback={<FormSkeleton />}>
-                {/* <SubscriptionForm 
+                <ConektaSubscriptionForm 
                   userEmail={session.user.email || ''} 
                   planPrice={Number(plan.precio)}
-                /> */}
-
-                <ClipSubscriptionForm 
-  userEmail={session.user.email || ''} 
-  planPrice={Number(plan.precio)}
-/>
-
+                />
               </Suspense>
             </div>
           </div>
@@ -309,7 +302,7 @@ export default async function CheckoutPage() {
             <div className="text-center">
               <div className="inline-flex items-center space-x-2 text-gray-600 font-light text-sm">
                 <IoShieldOutline className="w-4 h-4" />
-                <span>Pago seguro procesado por Mercado Pago</span>
+                <span>Pago seguro procesado por Conekta</span>
               </div>
             </div>
           </div>
@@ -342,4 +335,4 @@ function FormSkeleton() {
       </div>
     </div>
   );
-} 
+}

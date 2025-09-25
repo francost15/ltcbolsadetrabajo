@@ -52,36 +52,25 @@ export function UploadCVModal({ isOpen, onClose, onSuccess }: UploadCVModalProps
         throw new Error('Usuario no autenticado');
       }
 
-      // --- LOG DE DEPURACIÓN DEL FORM DATA ---
       const formData = new FormData();
       formData.append('file', file);
-      // Log para verificar el contenido del FormData
-      for (const [key, value] of formData.entries()) {
-        if (value instanceof File) {
-          console.log(`[FormData] key: ${key}, name: ${value.name}, type: ${value.type}, size: ${value.size}`);
-        } else {
-          console.log(`[FormData] key: ${key}, value: ${value}`);
-        }
-      }
 
-      // Subir a la API de Python
+      // Subir al servidor
       const response = await createRequest(
         API_ENDPOINTS.UPLOAD_CV(session.user.id),
         {
           method: 'POST',
           body: formData,
-          headers: {
-            // No incluir Content-Type para FormData - el browser lo maneja automáticamente
-          }
+          headers: {}
         },
         TIMEOUTS.UPLOAD
       );
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('❌ Error en upload:', response.status, errorText);
+        console.error('Error en upload:', response.status, errorText);
 
-        // Manejo de errores específicos del backend
+        // Manejo de errores específicos
         if (response.status === 400) {
           if (errorText.includes('NO_FILE')) {
             toast.error('No se encontró archivo en la solicitud. Asegúrate de seleccionar un archivo válido.');
@@ -103,10 +92,10 @@ export function UploadCVModal({ isOpen, onClose, onSuccess }: UploadCVModalProps
             return;
           }
         } else if (response.status === 404) {
-          toast.error('Endpoint no encontrado en la API');
+          toast.error('Servicio no encontrado');
           return;
         } else if (response.status >= 500) {
-          toast.error('Error del servidor en la API de Python');
+          toast.error('Error del servidor');
           return;
         }
         toast.error(`Error ${response.status}: ${errorText || 'Error desconocido'}`);
@@ -114,20 +103,20 @@ export function UploadCVModal({ isOpen, onClose, onSuccess }: UploadCVModalProps
       }
 
       const result = await response.json();
-      console.log('✅ CV procesado exitosamente:', result);
+      console.log('CV procesado exitosamente:', result);
 
-      toast.success('🎉 CV procesado exitosamente con IA');
+      toast.success('CV procesado exitosamente');
       onSuccess();
       onClose();
       setFile(null);
 
     } catch (error) {
-      console.error('❌ Error subiendo CV:', error);
+      console.error('Error subiendo CV:', error);
       if (error instanceof Error) {
         if (error.message.includes('fetch') || error.message.includes('abort')) {
-          toast.error('🔌 No se pudo conectar con la API de Python.\n\nVerifica que esté corriendo en puerto 8000');
+          toast.error('No se pudo conectar con el servidor. Verifica tu conexión.');
         } else if (error.message === 'Usuario no autenticado') {
-          toast.error('❌ Error de autenticación. Recarga la página');
+          toast.error('Error de autenticación. Recarga la página');
         } else {
           toast.error(error.message);
         }
@@ -146,7 +135,7 @@ export function UploadCVModal({ isOpen, onClose, onSuccess }: UploadCVModalProps
       <div className="bg-white rounded-lg max-w-md w-full p-6">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-lg font-semibold text-gray-900">
-            🐍 Analizar CV con API de Python
+            Analizar CV
           </h3>
           <button
             onClick={onClose}
@@ -209,7 +198,7 @@ export function UploadCVModal({ isOpen, onClose, onSuccess }: UploadCVModalProps
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
               </svg>
               <div className="text-sm text-blue-800">
-                <p className="font-medium">Tu API de Python extraerá:</p>
+                <p className="font-medium">El sistema extraerá:</p>
                 <ul className="mt-1 list-disc list-inside space-y-1">
                   <li>Información personal y contacto</li>
                   <li>Experiencia laboral</li>
@@ -243,7 +232,7 @@ export function UploadCVModal({ isOpen, onClose, onSuccess }: UploadCVModalProps
                 Procesando...
               </>
             ) : (
-              '🐍 Procesar con Python'
+              'Procesar CV'
             )}
           </button>
         </div>

@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FaBars, FaTimes, FaChevronDown } from 'react-icons/fa';
+import { FaBars, FaTimes, FaChevronDown, FaBriefcase } from 'react-icons/fa';
 import { IoBusiness, IoPerson } from 'react-icons/io5';
 import clsx from 'clsx';
 
@@ -83,10 +83,24 @@ const MobileMenu = ({ onClose }: { onClose: () => void }) => {
 
         <div className="flex-1 px-4 py-6 space-y-6 overflow-y-auto">
           <div>
+            <h3 className="mb-3 text-xs font-medium text-gray-400 uppercase tracking-wider">Navegación</h3>
+            <div className="space-y-2">
+              <Link
+                href="/vacancies"
+                onClick={onClose}
+                className="flex items-center w-full px-4 py-3 text-sm text-gray-600 hover:text-gray-900 rounded-xl hover:bg-gray-50 transition-all duration-200"
+              >
+                <FaBriefcase className="mr-3 w-5 h-5 text-gray-400" />
+                Ver Vacantes
+              </Link>
+            </div>
+          </div>
+
+          <div>
             <h3 className="mb-3 text-xs font-medium text-gray-400 uppercase tracking-wider">Iniciar Sesión</h3>
             <div className="space-y-2">
-              <Link 
-                href="/auth/login" 
+              <Link
+                href="/auth/login"
                 className="flex items-center w-full px-4 py-3 text-sm text-gray-600 hover:text-gray-900 rounded-xl hover:bg-gray-50 transition-all duration-200"
               >
                 <IoBusiness className="mr-3 w-5 h-5 text-gray-400" />
@@ -153,9 +167,15 @@ export const NavbarHome = () => {
             </div>
           </Link>
 
-          {/* Desktop Auth Buttons */}
+          {/* Desktop Nav Links and Auth Buttons */}
           <div className="hidden md:flex md:items-center md:space-x-4">
-            <Link 
+            <Link
+              href="/vacancies"
+              className="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-800 transition-all duration-200"
+            >
+              Vacantes
+            </Link>
+            <Link
               href="/auth/login"
               className="inline-flex items-center px-4 py-2 text-sm font-medium text-blue-800 hover:text-blue-900 transition-all duration-200"
             >
